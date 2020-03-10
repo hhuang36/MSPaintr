@@ -1,26 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import "./components/SubscriptionFeed.js";
+import SubscriptionFeed from "./components/SubscriptionFeed.js";
+import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
+import SeeMorePage from "./components/SeeMorePage";
+import NaviBar from "./components/NaviBar";
+import Login from "./components/login/Login.js";
+import Register from ""
+import DMs from "./components/dms/DirectMessages.js"
+import Profile from "./profile/Profile.js"
 
-function App() {
+export default function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <NaviBar/>
+        <Router>
+            <Switch>
+                <Route path={"/"} exact component={SubscriptionFeed}></Route>
+                <Route path={"/more"} component={SeeMorePage}></Route>
+                <Route path={"/login"} component={Login}></Route>
+                <Route path={"/register"} component={Register}></Route>
+                <Route path={"/directmessages"} component={DMs}></Route>
+                <Route path={"/profile"} component={Profile}></Route>
+            </Switch>
+        </Router>
     </div>
+
   );
 }
-
-export default App;

@@ -11,20 +11,20 @@ import DMs from "./components/dms/DirectMessages.js"
 import Profile from "./profile/Profile.js"
 
 export default function App() {
-    return (
-        <div className="App">
-            <NaviBar/>
-            <Router>
-                <Switch>
-                    <Route path={"/"} exact component={SubscriptionFeed}></Route>
-                    <Route path={"/more"} component={SeeMorePage}></Route>
-                    <Route path={"/login"} component={Login}></Route>
-                    <Route path={"/register"} component={Register}></Route>
-                    <Route path={"/directmessages"} component={DMs}></Route>
-                    <Route path={"/profile"} component={Profile}></Route>
-                </Switch>
-            </Router>
-        </div>
+  return (
+    <div className="App">
+        <NaviBar/>
+        <Router>
+          <Switch>
+            <Route path={"/"} exact component={SubscriptionFeed}></Route>
+            <Route path={"/more"} component={SeeMorePage}></Route>
+            <Route path={"/login"} component={Login}></Route>
+            <Route path={"/register"} component={Register}></Route>
+            <Route path={"/directmessages"} component={DMs}></Route>
+            <Route path={"/profile"} component={Profile}></Route>
+          </Switch>
+        </Router>
+      </div>
 
-    );
+  );
 }

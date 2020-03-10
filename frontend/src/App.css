@@ -1,14 +1,15 @@
 .App {
-    text-align: center;
-    font-family: "Comic Sans MS", cursive, sans-serif;
-    background: #7abaff;
+
+  text-align: center;
+  font-family: "Comic Sans MS", cursive, sans-serif;
+  background: #7abaff;
 }
 
 .LeftAlign {
-    text-align: left;
+  text-align: left;
 }
 .RightAlign {
-    text-align: right;
+  text-align: right;
 }
 
 .App-logo {
@@ -38,10 +39,10 @@
 }
 
 @keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

@@ -15,16 +15,16 @@ export default function App() {
     <div className="App">
         <NaviBar/>
         <Router>
-            <Switch>
-                <Route path={"/"} exact component={SubscriptionFeed}></Route>
-                <Route path={"/more"} component={SeeMorePage}></Route>
-                <Route path={"/login"} component={Login}></Route>
-                <Route path={"/register"} component={Register}></Route>
-                <Route path={"/directmessages"} component={DMs}></Route>
-                <Route path={"/profile"} component={Profile}></Route>
-            </Switch>
+          <Switch>
+            <Route path={"/"} exact component={SubscriptionFeed}></Route>
+            <Route path={"/more"} component={SeeMorePage}></Route>
+            <Route path={"/login"} component={Login}></Route>
+            <Route path={"/register"} component={Register}></Route>
+            <Route path={"/directmessages"} component={DMs}></Route>
+            <Route path={"/profile"} component={Profile}></Route>
+          </Switch>
         </Router>
-    </div>
+      </div>
 
   );
 }

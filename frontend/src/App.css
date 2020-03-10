@@ -1,5 +1,14 @@
 .App {
   text-align: center;
+  font-family: "Comic Sans MS", cursive, sans-serif;
+  background: #7abaff;
+}
+
+.LeftAlign {
+  text-align: left;
+}
+.RightAlign {
+  text-align: right;
 }
 
 .App-logo {

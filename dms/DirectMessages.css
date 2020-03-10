@@ -1,0 +1,82 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+html {
+  background: rgb(243, 198, 206);
+  font-family: "Lucida Handwriting";
+  font-weight: bold;
+}
+
+#textbox {
+  border-radius: 15px;
+  width: 90%;
+}
+
+h1 {
+  margin: auto;
+  color: darkcyan;
+  font-size: 60px;
+  font-family: Lucida Handwriting;
+}
+
+input {
+  border-radius: 15px;
+}
+
+a {
+  font-family: Tahoma;
+  font-size: medium;
+  font-weight: bold;
+}
+
+.Chat-Box {
+  border: 6px solid white;
+  width: 800px;
+  height: 545px;
+  background-color: beige;
+  border-radius: 10px;
+}
+
+#messagesdisplay {
+  width: 190px;
+  background-color: lightblue;
+}
+
+.DM-Side-Bar {
+  border: 4px solid white;
+  border-radius: 15px;
+  background-color: aliceblue;
+  margin-left: 200px;
+  width: 250px;
+  height: 550px;
+}
+
+div {
+  float: left;
+}
+
+li {
+  list-style-type: none;
+  color: darkcyan;
+  font-size: 20px;
+  font-family: "Lucida Handwriting";
+}
+
+ul.messagesList {
+  margin-top: 10px;
+  border-radius: 10px;
+  background-color: white;
+  width: 745px;
+  height: 450px;
+}
+
+ul {
+  border-radius: 15px;
+  width: 95%;
+  height: 500px;
+  margin-top: 13px;
+  margin-left: 8px;
+  background-color: lightblue;
+}

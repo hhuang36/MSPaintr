@@ -12,7 +12,6 @@ import Profile from "./profile/Profile.js"
 
 export default function App() {
   return (
-registration-page
     <div className="App">
         <NaviBar/>
         <Router>
@@ -26,21 +25,6 @@ registration-page
           </Switch>
         </Router>
       </div>
-
-    <div className="App">
-        <NaviBar/>
-        <Router>
-          <Switch>
-            <Route path={"/"} exact component={SubscriptionFeed}></Route>
-            <Route path={"/more"} component={SeeMorePage}></Route>
-            <Route path={"/login"} component={Login}></Route>
-            <Route path={"/register"} component={Register}></Route>
-            <Route path={"/directmessages"} component={DMs}></Route>
-            <Route path={"/profile"} component={Profile}></Route>
-          </Switch>
-        </Router>
-      </div>
-dev
 
   );
 }

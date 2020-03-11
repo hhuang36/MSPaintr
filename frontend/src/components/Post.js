@@ -1,9 +1,10 @@
 import React from "react";
+import "../App.css";
 import Card from "react-bootstrap/Card";
 import StarButton from "./StarButton.js";
 import CommentBox from "./CommentBox.js";
 import TestImage from "./testimages/testimage.png";
-import Link from "react-router-dom/Link";
+import {Link} from "react-router-dom";
 
 
 const Post = (props) =>{
@@ -17,7 +18,7 @@ const Post = (props) =>{
               <Card.Title><a href="#usernameprofile">{username}</a></Card.Title>
             <StarButton />
             <CommentBox />
-              <Link to={"/more"}>See More</Link>
+               <Link to={"/more"}>See More</Link>
           </Card.Body>
         </Card>
       </div>

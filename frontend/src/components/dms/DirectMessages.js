@@ -4,57 +4,40 @@ import { Component } from "react";
 
 function DirectMessages() {
   return (
-    <div className="App">
-      <Nav_Bar />
-      <h1>My DM's</h1>
-      <Side_Bar />
-      <Chat_Box />
+    <div className="DirectMessages">
+      <h1 className="DMsH1">My DM's</h1>
+      <SideBar />
+      <ChatBox />
     </div>
   );
 }
 
-class Nav_Bar extends React.Component {
-  render() {
-    return (
-      <div className="Nav-Bar">
-        <a class="active" href="#home">
-          Home
-        </a>
-        &nbsp;
-        <a href="#profile">My Profile</a>
-        &nbsp;
-        <a href="#about"> About</a>
-      </div>
-    );
-  }
-}
-
-class Side_Bar extends React.Component {
+class SideBar extends React.Component {
   x = 420;
   render() {
     return (
       <div className="DM-Side-Bar">
         <form>
-          <input type="text" name="name" placeholder="   Search username..." />
+          <input className="DMInput" type="text" name="name" placeholder="   Search username..." />
         </form>
-        <ul id="messagesdisplay">
-          <li>
+        <ul className="messagesDisplay" id="messagesdisplay">
+          <li className="DMLi">
             {" "}
             <EmotePalette /> hhuang36
           </li>
-          <li>
+          <li className="DMLi">
             {" "}
             <EmotePalette /> miaencar
           </li>
-          <li>
+          <li className="DMLi">
             {" "}
             <EmotePalette /> vjvitale
           </li>
-          <li>
+          <li className="DMLi">
             {" "}
             <EmotePalette /> Jesse{" "}
           </li>
-          <li>
+          <li className="DMLi">
             {" "}
             <EmotePalette /> Nick{" "}
           </li>
@@ -64,7 +47,7 @@ class Side_Bar extends React.Component {
   }
 }
 
-class Chat_Box extends React.Component {
+class ChatBox extends React.Component {
   render() {
     return (
       <div className="Chat-Box" id="chat">
@@ -72,7 +55,7 @@ class Chat_Box extends React.Component {
         <form>
           <label>
             <EmotePaintbrush />
-            <input
+            <input className="DMInput"
               id="textbox"
               type="text"
               name="message"

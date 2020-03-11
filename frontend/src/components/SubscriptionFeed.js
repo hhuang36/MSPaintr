@@ -1,15 +1,17 @@
 import React from "react";
+import "../App.css";
 import Post from "./Post";
 import CardColumns from "react-bootstrap/CardColumns";
 
-const SubScriptionFeed = () => {
+const SubscriptionFeed = () => {
   return (
-    <div className="App">
+    <div className="SubscriptionFeed">
       <CardColumns>
+          <Post />
           <Post />
       </CardColumns>
     </div>
   );
 };
 
-export default SubScriptionFeed;
+export default SubscriptionFeed;

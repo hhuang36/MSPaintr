@@ -1,0 +1,50 @@
+.Login{
+  text-align: center;
+}
+
+.LoginLabel,
+.LoginInput {
+  display: block;
+  text-align: center;
+}
+
+.LoginLabel {
+  font-family: "Comic Sans MS", "Comic Sans", 'Chalkboard SE', 'Comic Neue', cursive, sans-serif;
+  font-weight: bold;
+  color: darkcyan;
+  text-align: center;
+}
+
+.LoginH1 {
+  color: darkcyan;
+  font-size: 60px;
+  font-family: "Comic Sans MS", "Comic Sans", 'Chalkboard SE', 'Comic Neue', cursive, sans-serif;
+}
+
+.LoginHyperlink{
+  font-size: 15px;
+  font-family: "Comic Sans MS", "Comic Sans", 'Chalkboard SE', 'Comic Neue', cursive, sans-serif;
+  color: darkcyan;
+}
+
+.LoginInput {
+  width: 80%;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  margin-left: 35px;
+}
+
+.Login-Box {
+  border: 4px solid white;
+  border-radius: 30px;
+  background-color: aliceblue;
+  margin: auto;
+  width: 400px;
+  height: 400px;
+}
+
+
+
+.LoginLogo {
+  font-size: 50px;
+}

@@ -5,7 +5,7 @@ import { Component } from "react";
 function Login() {
   return (
     <div className="Login">
-      <h1> Welcome to MSPaintr! </h1>
+      <h1 className="LoginH1"> Welcome to MSPaintr! </h1>
       <Login_Box />
     </div>
   );
@@ -15,35 +15,31 @@ class Login_Box extends Component {
   render() {
     return (
       <div className="Login-Box">
-        <div className="Logo">
+        <div className="LoginLogo">
           <EmoteArtist />
         </div>
         <div className="Credentials">
           <form>
-            <label>
-              Username:
-              <input
+            <label className="LoginLabel">Username:</label>
+              <input className="LoginInput"
                 id="username"
                 type="text"
                 name="user"
                 placeholder="Enter username..."
               />
-            </label>
 
-            <label>
-              Password:
-              <input
+            <label className="LoginLabel">Password:</label>
+              <input className="LoginInput"
                 id="password"
                 type="password"
                 name="passwd"
                 placeholder="Enter password..."
               />
-            </label>
           </form>
         </div>
 
         <div className="Register-Link">
-          <a class="active" href="#register">
+          <a class="active" href="/register" className="LoginHyperlink">
             Register
           </a>
         </div>

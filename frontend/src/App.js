@@ -6,22 +6,25 @@ import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import SeeMorePage from "./components/SeeMorePage";
 import NaviBar from "./components/NaviBar";
 import Login from "./components/login/Login.js";
-import Register from ""
-import DMs from "./components/dms/DirectMessages.js"
-import Profile from "./profile/Profile.js"
+import Register from "./components/register/Regristration.js";
+import DMs from "./components/dms/DirectMessages.js";
+import Profile from "./components/profile/Profile.js";
+import logo from "./components/profile/profileimages/MSPaintRLogo.png";
 
 export default function App() {
   return (
     <div className="App">
         <NaviBar/>
+        <img className="Profile-Logo" src={logo}/>
         <Router>
           <Switch>
-            <Route path={"/"} exact component={SubscriptionFeed}></Route>
-            <Route path={"/more"} component={SeeMorePage}></Route>
-            <Route path={"/login"} component={Login}></Route>
-            <Route path={"/register"} component={Register}></Route>
-            <Route path={"/directmessages"} component={DMs}></Route>
-            <Route path={"/profile"} component={Profile}></Route>
+              <Route exact path={"/"} component={SubscriptionFeed}></Route>
+              <Route exact path={"/home"} component={SubscriptionFeed}></Route>
+              <Route exact path={"/more"} component={SeeMorePage}></Route>
+              <Route exact path={"/login"} component={Login}></Route>
+              <Route exact path={"/register"} component={Register}></Route>
+              <Route exact path={"/directmessages"} component={DMs}></Route>
+              <Route exact path={"/profile"} component={Profile}></Route>
           </Switch>
         </Router>
       </div>

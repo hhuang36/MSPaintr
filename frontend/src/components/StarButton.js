@@ -1,6 +1,4 @@
 import React from "react";
-import Button from "react-bootstrap/Button";
-import Image from "react-bootstrap/Image";
 import Star from "./testimages/upvoteimg.png";
 
 const StarButton = () => {
@@ -9,9 +7,9 @@ const StarButton = () => {
   }
   return (
     <div>
-      <Button onClick={starVote} size="sm">
-        <Image src={Star} />
-      </Button>
+      <button onClick={starVote} size="sm">
+        <img src={Star} alt="Star button"/>
+      </button>
         <br/>+1
     </div>
   );

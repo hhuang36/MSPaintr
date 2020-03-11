@@ -1,6 +1,5 @@
 import React from "react";
 import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
 
 const NewPost = () => {
   const [show, setShow] = React.useState(false);
@@ -8,9 +7,9 @@ const NewPost = () => {
   const handleShow = () => setShow(true);
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
+      <button variant="primary" onClick={handleShow}>
         New Post
-      </Button>
+      </button>
 
       <Modal
           show={show}
@@ -26,12 +25,12 @@ const NewPost = () => {
           <input type="file" accept="image/png" />
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <button variant="secondary" onClick={handleClose}>
             Cancel
-          </Button>
-          <Button variant="primary" onClick={handleClose}>
+          </button>
+          <button variant="primary" onClick={handleClose}>
             Post
-          </Button>
+          </button>
         </Modal.Footer>
       </Modal>
     </>

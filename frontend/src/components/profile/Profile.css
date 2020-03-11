@@ -1,12 +1,6 @@
-.App {
+.Profile {
   text-align: center;
 }
-
-html{
-  background-color: #9966ff; 
-  
-}
-
 
 .Profile-Side{
   float: left;
@@ -27,7 +21,7 @@ html{
 }
 
 
-button{
+.Profile-Button{
   padding: 0;
   border: none;
   background: none;
@@ -38,7 +32,7 @@ button{
   height: auto;
 }
 
-.App-Post{
+.Profile-Post{
   float: center;
   border: 1px solid white;
   background-color: white;
@@ -46,15 +40,15 @@ button{
   width: 800px;
   position: relative;
   margin: auto;
+  margin-left: 40%;
   padding: 3%;
   margin-top: 5%;
-  margin-left: 40%;
   margin-bottom: 5%;
 }
 
-.logo{
+.Profile-Logo{
   margin-top: 2%;
-  height: 300px;
+  height: 200px;
   width: auto;
   box-shadow: 3px 3px #969696;
 }

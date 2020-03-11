@@ -1,0 +1,14 @@
+.Regristration{
+	border: 1px solid white;
+  	background-color: white;
+  	box-shadow: 3px 3px #969696;
+ 	padding: 3%;
+ 	width: 40%;
+  	margin-top: 10%;
+  	margin-left: 30%;
+  	text-align: center;
+}
+
+.Registration-Heading1{
+	font-family: "Comic Sans MS", cursive, sans-serif;
+}

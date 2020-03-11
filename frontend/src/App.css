@@ -5,6 +5,10 @@
   background: #7abaff;
 }
 
+html{
+    background: #7abaff;
+}
+
 .LeftAlign {
   text-align: left;
 }
@@ -45,4 +49,20 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.Post, .SeeMorePage{
+    background-color: white;
+    width: 50%;
+    margin: 2% 25%;
+    padding: 1%;
+}
+
+.SeeMorePage{
+    width: 70%;
+    margin: 2% 14%;
+}
+
+.SeeMoreImage{
+    width: 80%;
 }

@@ -4,7 +4,7 @@ import './Regristration.css';
 function Regristration() {
   return (
     <div className="Regristration">
-      <h1>Regristration</h1>
+      <h1 className="Registration-Heading1">Regristration</h1>
       <br/>
       <br/>
       <RegForm/>

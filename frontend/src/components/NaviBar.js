@@ -1,26 +1,22 @@
 import React from "react";
-import Navbar from "react-bootstrap/Navbar";
+import "../App.css";
 import SearchBar from "./SearchBar";
 import NewPost from "./NewPost.js";
-import Link from "react-router-dom/Link";
+
 
 const NaviBar = () => {
   return (
-    <div>
-      <Navbar className="LeftAlign">
-        <Navbar.Brand href="#home">MSPaintr</Navbar.Brand>
+    <div className="LeftAlign">
+        <a href="/home">MSPaintr</a>
         <br />
-        <Navbar.Text>
-          Signed in as: <Link to={"/login"}>myusername</Link>
+                <a href="/login">Sign in</a>
           <br />
-          <Link to={"/profile"}>Profile</Link>
+                <a href="/profile">Profile</a>
           <br />
-          <Link to={"/directmessages"}>DMs</Link>
+                <a href="/directmessages">DMs</a>
           <br />
           <NewPost />
           <SearchBar />
-        </Navbar.Text>
-      </Navbar>
       <br />
       <br />
     </div>

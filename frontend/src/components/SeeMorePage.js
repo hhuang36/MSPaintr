@@ -1,13 +1,12 @@
 import React from "react";
 import StarButton from "./StarButton.js";
-import Image from "react-bootstrap/Image";
 import CommentBox from "./CommentBox.js";
 import TestImage from "./testimages/testimage.png";
 
 const SeeMorePage = () => {
   return (
     <div className="SeeMorePage">
-      <Image variant="top" src={TestImage}/><br/>
+      <img className="SeeMoreImage" variant="top" src={TestImage} alt="user image"/><br/>
         <a href="#usernameprofile">username</a><br/>
       <StarButton />
         <CommentBox /><br/>

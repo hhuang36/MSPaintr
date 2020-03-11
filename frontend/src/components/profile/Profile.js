@@ -1,35 +1,34 @@
 import React, {Component} from 'react';
 import './Profile.css';
-import profPic from "./subtle lgbt.png"
-import img1 from "./Disc Emote - Janna.png"
-import img2 from "./misty boi.png"
-import img3 from "./eggie.png"
-import logo from "./MSPaintRLogo.png"
+import profPic from "./profileimages/subtle lgbt.png"
+import img1 from "./profileimages/Disc Emote - Janna.png"
+import img2 from "./profileimages/misty boi.png"
+import img3 from "./profileimages/eggie.png"
+import StarButton from "../StarButton";
 
 function Profile() {
   return (
-    <div className="App">
-      <img className="logo" src={logo}/>
-      <Side_Bio/>
-      <div className="App-Posts">
+    <div className="Profile">
+      <SideBio/>
+      <div className="Profile-Posts">
           <Posts/>
         </div>
     </div>
   );
 }
 
-class Side_Bio extends React.Component{
+class SideBio extends React.Component{
   x=420
   render(){
     return(
         <div className="Profile-Side">
           <SimpleMessage body="xX_lucid_Xx"/>
           <br/>
-          <Prof_Pic imgName={profPic}/>
+          <ProfPic imgName={profPic}/>
           <br/>
-          <button> <EmoteMail/> </button>
+          <button className="Profile-Button"> <EmoteMail/> </button>
           <span>&nbsp;</span>
-          <button> <EmoteSheep count = {this.x}/> </button>
+          <button className="Profile-Button"> <EmoteSheep count = {this.x}/> </button>
           <br/>
           <SimpleMessage body="Wassup my dudes?!? My name Jeff. I am an ~ARIST~"/>
           <br/>
@@ -52,18 +51,18 @@ class Posts extends React.Component{
 
 function Post(props){
   return(
-    <div className="App-Post">
+    <div className="Profile-Post">
       <img className="Post-Image" src={props.imgName} alt="Cannot Veiw Image"/>
       <br/>
-      <button><span role="img" aria-label="star">⭐</span> </button>
-      <button><span role="img" aria-label="msg">💬</span></button>
+      <button  className="Profile-Button"><span role="img" aria-label="star">⭐</span> </button>
+      <a href="#more"><button  className="Profile-Button"><span role="img" aria-label="msg">💬</span></button></a>
       <br/>
       <p>{props.text}</p>
     </div>
     )
 }
 
-class Prof_Pic extends React.Component{
+class ProfPic extends React.Component{
   render(){
     return <img className="Prof-Image" src={this.props.imgName} alt="This is a pic"/>
   }

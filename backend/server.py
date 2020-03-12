@@ -1,16 +1,32 @@
-'''SOURCE: https://docs.python.org/3/library/http.server.html
-HOW TO: spec different dir to serve files'''
+#Source: Bottle
 
-import http.server
-import socketserver
-import os
 
-PORT = 8000
-FILE = os.path.dirname(__file__)
-frontend_dir = os.path.join(FILE, '../frontend')
-os.chdir(frontend_dir)
+from bottle import get, post, request, run, response, view
 
-Handler = http.server.SimpleHTTPRequestHandler
-with socketserver.TCPServer(("", PORT), Handler) as httpd:
-    print("Serve at port", PORT)
-    httpd.serve_forever()
+
+def readFile(filename):
+	result = ""
+	with open(filename, 'r') as f:
+		lines = f.readlines()
+		for line in lines:
+			result += line + '\r\n'
+	return result 
+
+
+@get('/')
+@view('template')
+def serve_home():
+	return dict(src="/index")
+
+@get('/App')
+def getFeed():
+	response.content_type="text/javascript"
+	return readFile("../frontend/src/App.js")
+
+@get('/index')
+def getIndex():
+	response.content_type="text/javascript"
+	return readFile("../frontend/src/index.js")
+
+if __name__ == "__main__":
+	run(host='localhost', port=8080)

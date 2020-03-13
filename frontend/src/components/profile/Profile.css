@@ -1,0 +1,66 @@
+.Profile {
+  text-align: center;
+}
+
+.Profile-Side{
+  float: left;
+  border: 1px solid white;
+  background-color: white;
+  box-shadow: 3px 3px #969696;
+  padding: 3%;
+  width: 20%;
+  margin-left:5%;
+  margin-top: 10%;
+  border-radius: 15px;
+
+  font-family: "Comic Sans MS", "Comic Sans", 'Chalkboard SE', 'Comic Neue', cursive, sans-serif;
+}
+
+.LeftAlign {
+  text-align: left;
+  font-family: "Comic Sans MS", "Comic Sans", 'Chalkboard SE', 'Comic Neue', cursive, sans-serif;
+}
+
+.Prof-Image{
+  width: 120px;
+  height:auto;
+}
+
+
+.Profile-Button{
+  padding: 0;
+  border: none;
+  background: none;
+}
+
+.Post-Image{
+  width: 750px;
+  height: auto;
+  
+}
+
+.Profile-Post{
+  float: center;
+  border: 1px solid white;
+  background-color: white;
+  box-shadow: 3px 3px #969696;
+  width: 800px;
+  position: relative;
+  margin: auto;
+  margin-left: 40%;
+  padding: 3%;
+  margin-top: 5%;
+  margin-bottom: 5%;
+  border-radius: 15px;
+}
+
+.Profile-Logo{
+  height: 200px;
+  width: auto;
+  box-shadow: 3px 3px #969696;
+  margin-left: 28%;
+}
+
+html{
+    background: #7abaff;
+}

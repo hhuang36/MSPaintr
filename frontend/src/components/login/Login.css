@@ -1,37 +1,36 @@
-.Login{
-  text-align: center;
-}
-
-.LoginLabel,
-.LoginInput {
+label,
+input {
   display: block;
-  text-align: center;
 }
 
-.LoginLabel {
-  font-family: "Comic Sans MS", "Comic Sans", 'Chalkboard SE', 'Comic Neue', cursive, sans-serif;
+html {
+  background-color: #7ababaff;
+}
+
+label {
+  font-family: "Comic Sans MS";
   font-weight: bold;
   color: darkcyan;
-  text-align: center;
+  margin-bottom: 40px;
 }
 
-.LoginH1 {
+h1 {
+  text-align: center;
   color: darkcyan;
   font-size: 60px;
-  font-family: "Comic Sans MS", "Comic Sans", 'Chalkboard SE', 'Comic Neue', cursive, sans-serif;
+  font-family: "Comic Sans MS";
 }
 
-.LoginHyperlink{
+a {
   font-size: 15px;
-  font-family: "Comic Sans MS", "Comic Sans", 'Chalkboard SE', 'Comic Neue', cursive, sans-serif;
+  font-family: "Comic Sans MS";
+
   color: darkcyan;
 }
 
-.LoginInput {
+input {
   width: 80%;
   border-radius: 15px;
-  margin-bottom: 20px;
-  margin-left: 35px;
 }
 
 .Login-Box {
@@ -43,8 +42,18 @@
   height: 400px;
 }
 
+.Credentials {
+  margin-left: 75px;
+}
 
+.Register-Link {
+  margin-left: 180px;
+}
 
-.LoginLogo {
+.Login-Button {
+  margin-left: 180px;
+}
+.Logo {
   font-size: 50px;
+  margin-left: 170px;
 }

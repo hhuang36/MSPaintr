@@ -1,68 +1,81 @@
-.DirectMessages {
-  font-family: "Comic Sans MS", cursive, sans-serif;
-  text-align: center;
-}
-
-html {
-  font-family: "Comic Sans MS", cursive, sans-serif;
+body {
+  background: #7ababaff;
+  font-family: "Comic Sans MS";
   font-weight: bold;
 }
-
-#textbox {
-  border-radius: 15px;
-  width: 90%;
-}
-
-.DMsH1 {
+h1 {
   margin: auto;
   color: darkcyan;
   font-size: 60px;
-  font-family: "Comic Sans MS", cursive, sans-serif;;
+  font-family: "Comic Sans MS";
 }
 
-.DMInput {
-  border-radius: 15px;
-}
-
-.Chat-Box {
-  border: 6px solid white;
-  width: 800px;
-  height: 545px;
-  background-color: beige;
-  border-radius: 10px;
-  float: left;
-}
-
-#messagesdisplay {
-  width: 190px;
-  background-color: lightblue;
-}
-
-.DM-Side-Bar {
+#sidebar{
   border: 4px solid white;
   border-radius: 15px;
   background-color: aliceblue;
   margin-left: 200px;
   width: 250px;
   height: 550px;
+}
+
+div{
   float: left;
 }
 
-.DMLi {
-  list-style-type: none;
-  color: darkcyan;
-  font-size: 20px;
+#chat{
+  border: 6px solid white;
+  width: 800px;
+  height: 545px;
+  background-color: beige;
+  border-radius: 10px;
 }
 
-ul.messagesList {
+#messagesdisplay{
+  width:150px;
+  background-color: darkcyan;
+}
+
+a {
+  font-family: "Comic Sans MS";
+  font-size: medium;
+  font-weight: bold;
+}
+
+#searchmessages {
+  margin-left: 10px;
+  margin-top: 10px;
+  border-radius: 15px;
+  width: 90%;
+}
+#button{
+  border-radius: 15px;
+  margin-left: 570px;
+  margin-top: 380px;
+}
+
+#textbox{
+  border-radius: 15px;
+  width: 90%;
+  margin-left: 35px;
+}
+
+li {
+  list-style-type: circle;
+  color: darkcyan;
+  font-size: 20px;
+  font-family: "Comic Sans MS";
+}
+
+ul.messagesList{
   margin-top: 10px;
   border-radius: 10px;
   background-color: white;
-  width: 745px;
+  width: 728px;
   height: 450px;
 }
 
-ul.messagesDisplay {
+ul {
   border-radius: 15px;
   width: 95%;
   height: 500px;

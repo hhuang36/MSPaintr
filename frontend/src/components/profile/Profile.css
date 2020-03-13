@@ -16,6 +16,11 @@
   font-family: "Comic Sans MS", "Comic Sans", 'Chalkboard SE', 'Comic Neue', cursive, sans-serif;
 }
 
+.LeftAlign {
+  text-align: left;
+  font-family: "Comic Sans MS", "Comic Sans", 'Chalkboard SE', 'Comic Neue', cursive, sans-serif;
+}
+
 .Prof-Image{
   width: 120px;
   height:auto;
@@ -50,7 +55,6 @@
 }
 
 .Profile-Logo{
-  margin-top: 2%;
   height: 200px;
   width: auto;
   box-shadow: 3px 3px #969696;

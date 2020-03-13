@@ -11,6 +11,7 @@ html{
 
 .LeftAlign {
   text-align: left;
+  font-family: "Comic Sans MS", "Comic Sans", 'Chalkboard SE', 'Comic Neue', cursive, sans-serif;
 }
 .RightAlign {
   text-align: right;
@@ -42,20 +43,31 @@ html{
     color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.Profile-Logo{
+  
+  height: 200px;
+  width: auto;
+  box-shadow: 3px 3px #969696;
+  margin-left: 24%;
+
 }
 
 .Post, .SeeMorePage{
-    background-color: white;
-    width: 50%;
-    margin: 2% 25%;
-    padding: 1%;
+    float: center;
+  border: 1px solid white;
+  background-color: white;
+  box-shadow: 3px 3px #969696;
+  width: 800px;
+  position: relative;
+  margin: auto;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 3%;
+  margin-top: 5%;
+  margin-bottom: 5%;
+  border-radius: 15px;
+
+  font-family: "Comic Sans MS", "Comic Sans", 'Chalkboard SE', 'Comic Neue', cursive, sans-serif;
 }
 
 .SeeMorePage{
@@ -65,4 +77,10 @@ html{
 
 .SeeMoreImage{
     width: 80%;
+}
+
+.Post-Image{
+  width: 750px;
+  height: auto;
+  
 }

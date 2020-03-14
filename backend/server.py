@@ -1,28 +1,12 @@
 #Source: Bottle
 
 
-from bottle import get, post, request, route,redirect, run, response
-
-
-def readFile(filename):
-	result = ""
-	with open(filename, 'r') as f:
-		lines = f.readlines()
-		for line in lines:
-			result += line + '\r\n'
-	return result 
-
-def createImageFile(filename):
-	body = ""
-	with open(filename, "rb") as f:
-		body = f.read()
-
-	return body
+from bottle import get, route, redirect, run, static_file
 
 
 @get('/')
 def serve_home():
-	return readFile("../frontend/src/components/Home.html")
+	return static_file("Home.html", root="../frontend/src/components", mimetype="text/html")
 
 @route('/home')
 def getFeed():
@@ -30,77 +14,67 @@ def getFeed():
 
 @get("/App.css")
 def serveAppCSS():
-	response.content_type = 'text/css; charset=utf-8'
-	return readFile("../frontend/src/App.css")
+	return static_file("App.css", root="../frontend/src/", mimetype="text/css")
 
 @get('/login')
 def serveLogin():
-	return readFile("../frontend/src/components/login/Login.html")
+	return static_file("Login.html", root="../frontend/src/components/login", mimetype="text/html")
 
 @get("/Login.css")
 def serveLoginCSS():
-	response.content_type = 'text/css; charset=utf-8'
-	return readFile("../frontend/src/components/login/Login.css")
+	return static_file("Login.css", root="../frontend/src/components/login", mimetype="text/css")
 
 @get("/register")
 def serveRegister():
-	return readFile("../frontend/src/components/register/Regristration.html")
+	return static_file("Regristration.html", root="../frontend/src/components/register", mimetype="text/html")
 
 @get("/Regristration.css")
 def serveRegisterCSS():
-	response.content_type = 'text/css; charset=utf-8'
-	return readFile("../frontend/src/components/register/Regristration.css")
+	return static_file("Regristration.css", root="../frontend/src/components/register", mimetype="text/css")
 
 @get("/profile")
 def serveProfile():
-	return readFile("../frontend/src/components/profile/Profile.html")
+	return static_file("Profile.html", root="../frontend/src/components/profile", mimetype="text/html")
 
 @get("/Profile.css")
 def serveProfileCSS():
-	response.content_type = 'text/css; charset=utf-8'
-	return readFile("../frontend/src/components/profile/Profile.css")
+	return static_file("Profile.css", root="../frontend/src/components/profile", mimetype="text/css")
 
 @get("/directmessages")
 def serveDMS():
-	return readFile("../frontend/src/components/dms/DirectMessages.html")
+	return static_file("DirectMessages.html", root="../frontend/src/components/dms", mimetype="text/html")
 
 @get("/DirectMessages.css")
 def serveDMSCSS():
-	response.content_type = 'text/css; charset=utf-8'
-	return readFile("../frontend/src/components/dms/DirectMessages.css")
+	return static_file("DirectMessages.css", root="../frontend/src/components/dms", mimetype="text/css")
 
 @get("/newpost")
 def serveNewPost():
-	return readFile("../frontend/src/components/NewPost.html")
+	return static_file("NewPost.html", root="../frontend/src/components", mimetype="text/html")
 
 @get("/seemore")
 def serveMore():
-	return readFile("../frontend/src/components/SeeMore.html")
+	return static_file("SeeMore.html", root="../frontend/src/components", mimetype="text/html")
 
 @get("/MSPaintRLogo.png")
 def serveLogo():
-	response.content_type = "image/png; charset=ascii"
-	return createImageFile("../frontend/src/components/profile/profileimages/MSPaintRLogo.png")
+	return static_file("MSPaintRLogo.png", root="../frontend/src/components/profile/profileimages", mimetype="image/png")
 
 @get("/testimage.png")
 def serveLogo():
-	response.content_type = "image/png; charset=ascii"
-	return createImageFile("../frontend/src/components/testimages/testimage.png")
+	return static_file("testimage.png", root="../frontend/src/components/testimages", mimetype="image/png")
 
 @get("/testimage2.png")
 def serveLogo():
-	response.content_type = "image/png; charset=ascii"
-	return createImageFile("../frontend/src/components/testimages/testimage2.png")
+	return static_file("testimage2.png", root="../frontend/src/components/testimages", mimetype="image/png")
 
 @get("/eggie.png")
 def serveLogo():
-	response.content_type = "image/png; charset=ascii"
-	return createImageFile("../frontend/src/components/profile/profileimages/eggie.png")
+	return static_file("eggie.png", root="../frontend/src/components/profile/profileimages", mimetype="image/png")
 
 @get("/subtle_lgbt.png")
 def serveLogo():
-	response.content_type = "image/png; charset=ascii"
-	return createImageFile("../frontend/src/components/profile/profileimages/subtle_lgbt.png")
+	return static_file("subtle_lgbt.png", root="../frontend/src/components/profile/profileimages", mimetype="image/png")
 
 if __name__ == "__main__":
 	run(host='localhost', port=8000)

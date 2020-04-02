@@ -23,23 +23,17 @@
 	<img src="MSPaintRLogo.png" class="Profile-Logo"/>
 	<div class="SubscriptionFeed">
 		<div class="Post">
-			<p>POSTED BY: ms_artist</p>
-			<img class="Post-Image" src="testimage.png" alt="Cannot Veiw Image"/>
-     		 <br/>
-	         <input type ="text" id="user_name" />
-	        <input type ="submit" value="Add Comment"/>
-		  	<button  class="Profile-Button">⭐</button>
-		  	<br>
-		  	<a href="seemore">See More</a>
+			% for post in posts:
+				<p>POSTED BY: {{user_name}}</p>
+				<img class="Post-Image" src={{post_image}} alt="Cannot Veiw Image"/>
+	     		 <br/>
+		         <input type ="text" id="user_name" />
+		        <input type ="submit" value="Add Comment"/>
+			  	<button  class="Profile-Button">⭐</button>
+			  	<br>
+			  	<a href= {{post_id}}>See More</a>
+			% end
 		</div>
-		<div class="Post">
-			<p>POSTED BY: plant_queen</p>
-			<img class="Post-Image" src="testimage2.png" alt="Cannot Veiw Image"/>
-     		 <br/>
-	         <input type ="text" id="user_name" />
-	        <input type ="submit" value="Add Comment"/>
-		  	<button  class="Profile-Button">⭐</button>
-		  	<br>
-		</div>
+		
 	</div>
 </body>

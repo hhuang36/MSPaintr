@@ -21,14 +21,15 @@
     </div>
 	<img src="MSPaintRLogo.png" class="Profile-Logo"/>
 	<div class="Post">
-		<p>POSTED BY: ms_artist</p>
-		<img class="Post-Image" src="testimage.png" alt="Cannot Veiw Image"/>
+		<p>POSTED BY: {{user_name}}</p>
+		<img class="Post-Image" src={{post_image}} alt="Cannot Veiw Image"/>
  		 <br/>
          <input type ="text" id="user_name" />
         <input type ="submit" value="Add Comment"/>
 	  	<button  class="Profile-Button">⭐</button>
 	  	<br>
-	  	<p>n00b_user: first comment!!!!!</p>
-        <p>test123: wow!! such beauty</p>
+	  	% for comment in comments:
+        <p>{{user}}:{{comment_body}}</p>
+      % end
 	</div>
 </body>

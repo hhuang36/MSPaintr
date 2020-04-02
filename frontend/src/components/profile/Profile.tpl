@@ -22,26 +22,24 @@
 	<img src="MSPaintRLogo.png" class="Profile-Logo"/>
 	<div class="Profile">
       <div class="Profile-Side">
-          <p>"xX_lucid_Xx"<p/>
-          <br/>
-          <img class="Prof-Image" src="subtle_lgbt.png" alt="This is a pic"/>
-          <br/>
+          <p>{{user_name}}<p/>
+          
           <button class="Profile-Button">💌</button>
           <span>&nbsp;</span>
-          <button class="Profile-Button"> 420 🐑 </button>
+          <button class="Profile-Button"> 🐑 </button>
           <br/>
-          <p>"Wassup my dudes?!? My name Jeff. I am an ~ARIST~"</p>
+          <p>{{user_bio}}</p>
           <br/>
         </div>
       <div class="Profile-Posts">
+        % for image in images:
           <div class="Profile-Post">
-      <img class="Post-Image" src="eggie.png" alt="Cannot Veiw Image"/>
-      <br/>
-      <button  class="Profile-Button">⭐</button>
-      <button  class="Profile-Button">💬</button>
-      <br/>
-      <p>I want some eggs</p>
-    </div>
+            <img class="Post-Image" src=image alt="Cannot Veiw Image"/>
+            <br/>
+            <button  class="Profile-Button">⭐</button>
+            <button  class="Profile-Button">💬</button>
+        % end
+          </div>
         </div>
     </div>
 </body>

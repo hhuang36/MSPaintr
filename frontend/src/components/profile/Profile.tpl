@@ -34,14 +34,13 @@
       <div class="Profile-Posts">
         % for image in images:
           <div class="Profile-Post">
-            <img class="Post-Image" src=image alt="Cannot Veiw Image"/>
+            <img class="Post-Image" src={{image}} alt="Cannot Veiw Image"/>
             <br/>
             <button  class="Profile-Button">⭐</button>
             <button  class="Profile-Button">💬</button>
-        % end
           </div>
+        % end
         </div>
     </div>
 </body>
 
-<!--- note to self: convert this to templating but not now>

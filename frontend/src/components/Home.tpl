@@ -22,18 +22,20 @@
     </div>
 	<img src="MSPaintRLogo.png" class="Profile-Logo"/>
 	<div class="SubscriptionFeed">
-		<div class="Post">
-			% for post in posts:
-				<p>POSTED BY: {{user_name}}</p>
-				<img class="Post-Image" src={{post_image}} alt="Cannot Veiw Image"/>
+		% for post in posts:
+			<div class="Post">
+			
+				<p>POSTED BY: {{post["user_name"]}}</p>
+				<img class="Post-Image" src={{post["post_image"]}} alt="Cannot Veiw Image"/>
 	     		 <br/>
 		         <input type ="text" id="user_name" />
 		        <input type ="submit" value="Add Comment"/>
 			  	<button  class="Profile-Button">⭐</button>
 			  	<br>
-			  	<a href= {{post_id}}>See More</a>
-			% end
-		</div>
+			  	<a href= seemore/{{post["post_id"]}}>See More</a>
+			
+			</div>
+		% end
 		
 	</div>
 </body>

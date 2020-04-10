@@ -1,16 +1,25 @@
 #Source: Bottle
 
 
-from bottle import get, route, redirect, run, static_file, view
+from bottle import get, route, redirect, run, static_file, view, post, request
 import bottle
+import json
 bottle.TEMPLATES.clear()
 bottle.TEMPLATE_PATH.insert(0, '../frontend/src/components/')
 
 @get('/')
 @view("Home.tpl")
 def serve_home():
+	"""
+	format: dictionary with one key, posts, which is a list of dictionaries
+	posts has 4 keys, user_name, post_image, post_id and likes
+	user_name is a string containing the user who posted the image
+	post_image is a string containing the name of the image to be displayed
+	post_id cointains a string of the post id
+	likes is an integer containing the number of likes a post has
+	"""
 	retVal = {"posts":[]}
-	retVal["posts"] = [{"user_name": "eggie", "post_image": "eggie.png", "post_id": "eggie.png"},{"user_name": "eggie", "post_image": "testimage.png", "post_id": "testimage.png"}]
+	retVal["posts"] = [{"user_name": "eggie", "post_image": "eggie.png", "post_id": "eggie.png", "likes" : 8},{"likes": 9, "user_name": "eggie", "post_image": "testimage.png", "post_id": "testimage.png"}]
 
 	return retVal
 
@@ -18,9 +27,20 @@ def serve_home():
 def getFeed():
 	redirect('/')
 
+@post("/updoot")
+def serveUpdoot():
+	image_name = json.loads(request.body.read().decode('utf-8'))
+	#Put code here to get the number of updoots for the given image and add 1 to it
+	#return said numbers
+	return json.dumps(8)
+
 @get("/App.css")
 def serveAppCSS():
 	return static_file("App.css", root="../frontend/src/", mimetype="text/css")
+
+@get("/app.js")
+def serveAppCSS():
+	return static_file("app.js", root="../frontend/src/", mimetype="text/javascript")
 
 @get('/login')
 def serveLogin():
@@ -41,11 +61,16 @@ def serveRegisterCSS():
 @get("/profile")
 @view("profile/Profile.tpl",)
 def serveProfile():
-	retVal ={"user_name" : '',"user_bio": '', "images": []}
+	"""
+	format is a dictionary with the keys user_name, user_bio and images
+	user_name and user_bio hold strings that hold the user's username and bio respectively
+	images holds a dicitonary where the name of each image is the key and the value is the number (integer) of likes recieve
+	"""
+	retVal ={"user_name" : '',"user_bio": '', "images": {}}
 
 	retVal["user_name"] = "eggie"
 	retVal["user_bio"] = "I like tofu and MS Paint"
-	retVal["images"] = ["testimage.png", "testimage2.png", "eggie.png"]
+	retVal["images"] = {"testimage.png": 7, "testimage2.png": 80, "eggie.png": 999 }
 
 	return retVal
 
@@ -68,7 +93,16 @@ def serveNewPost():
 @get("/seemore/<post_id>")
 @view("SeeMore.tpl")
 def serveMore(post_id):
-	retVal = {"user_name": "", "post_image": "", "comments":[] }
+	"""
+	format: a dictionary with 4 keys user_name, post_image, comments, and likes
+	user_name is a stirng containing the user who posted the image
+	post_image is the name of the image file to be displayed (string)
+	comments is a list of dictionaries, with two keys user and comment_body
+		user is the username of the commenter
+		comment_body is their comment
+	likes is an integer contianing the number of likes
+	"""
+	retVal = {"user_name": "", "post_image": "", "comments":[], "likes" : 0 }
 	retVal["user_name"] = "eggie"
 	retVal["post_image"] = "../" + post_id
 	print(post_id)

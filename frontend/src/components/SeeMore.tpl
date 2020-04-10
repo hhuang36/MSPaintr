@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 	<link rel="stylesheet" type="text/css" href="/App.css"/>
+  <script src="/app.js"></script>
 	<title>Home</title>
 </head>
 <body>
@@ -22,11 +23,13 @@
 	<img src="../MSPaintRLogo.png" class="Profile-Logo"/>
 	<div class="Post">
 		<p>POSTED BY: {{user_name}}</p>
-		<img class="Post-Image" src={{post_image}} alt="cannot veiw image"/>
+    %image = post_image.replace("../", "")
+		<img class="Post-Image" id={{image}} src={{post_image}} alt="cannot veiw image"/>
  		 <br/>
          <input type ="text" id="user_name" />
         <input type ="submit" value="Add Comment"/>
-	  	<button  class="Profile-Button">⭐</button>
+      
+	  	<button  class="Profile-Button" onclick="updoot('{{image}}');"><span id="count{{image}}">{{likes}}</span>⭐</button>
 	  	<br>
 	  	% for comment in comments:
         <p>{{comment["user"]}}:{{comment["comment_body"]}}</p>

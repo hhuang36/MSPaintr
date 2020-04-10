@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 	<link rel="stylesheet" type="text/css" href="Profile.css"/>
+  <script src="app.js"></script>
 	<title>Profile</title>
 </head>
 <body>
@@ -32,12 +33,14 @@
           <br/>
         </div>
       <div class="Profile-Posts">
-        % for image in images:
+        % for image in images.keys():
           <div class="Profile-Post">
-            <img class="Post-Image" src={{image}} alt="Cannot Veiw Image"/>
+            <img class="Post-Image" id={{image}} src={{image}} alt="Cannot Veiw Image"/>
             <br/>
-            <button  class="Profile-Button">⭐</button>
+            <button  class="Profile-Button" onclick="updoot('{{image}}');"><span id="count{{image}}">{{images[image]}}</span>⭐</button>
             <button  class="Profile-Button">💬</button>
+            <br>
+            <a href= seemore/{{image}}>See More</a>
           </div>
         % end
         </div>

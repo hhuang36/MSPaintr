@@ -20,14 +20,15 @@
   </div>
 
   <div class="Post">
-    <form enctype="multipart/form-data" id="Form">
+    <form action="/image-form" method="post" enctype="multipart/form-data" id="Form">
         <label>
           Add your Image!
         </label>
           <br/>
-         <input type="file" id="name" name="name"><br>
-        <input type="submit" value="Add Image!">
+         <input type="file" id="image" name="name"><br>
+        <input type="submit" value="Add Image!" onclick="postImage('defaultuser')">
       </form>
     </div>
   </div>
+<script src="app.js"></script>
 </body>

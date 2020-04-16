@@ -26,13 +26,13 @@
     %image = post_image.replace("../", "")
 		<img class="Post-Image" id={{image}} src={{post_image}} alt="cannot veiw image"/>
  		 <br/>
-         <input type ="text" id="user_name" />
-        <input type ="submit" value="Add Comment"/>
-      
+         <input type ="text" id="comment" />
+        <input type ="submit" value="Add Comment" onclick=insertComment("defaultuser", "{{post_image}}")/>
 	  	<button  class="Profile-Button" onclick="updoot('{{image}}');"><span id="count{{image}}">{{likes}}</span>⭐</button>
 	  	<br>
 	  	% for comment in comments:
         <p>{{comment["user"]}}:{{comment["comment_body"]}}</p>
       % end
 	</div>
+	<script src="../app.js"></script>
 </body>

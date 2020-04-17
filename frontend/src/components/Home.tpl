@@ -27,7 +27,7 @@
 			<div class="Post">
 			
 				<p>POSTED BY: {{post["user_name"]}}</p>
-				<img class="Post-Image" id={{post["post_id"]}} src={{post["post_image"]}} alt="Cannot Veiw Image"/>
+				<img class="Post-Image" id={{post["post_id"]}} src="/image/{{post['post_image']}}" alt="Cannot Veiw Image"/>
 	     		 <br/>
 			  	<button  class="Profile-Button" onclick="socket.send('{{post["post_image"]}}');"><span id="count{{post["post_image"]}}">{{post["likes"]}}</span>⭐</button>
 			  	<br>

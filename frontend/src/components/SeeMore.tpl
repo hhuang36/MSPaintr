@@ -23,7 +23,7 @@
 	<img src="../MSPaintRLogo.png" class="Profile-Logo"/>
 	<div class="Post">
 		<p>POSTED BY: {{user_name}}</p>
-    %image = post_image.replace("../", "")
+    %image = post_image.replace("../image/", "")
 		<img class="Post-Image" id={{image}} src={{post_image}} alt="cannot veiw image"/>
  		 <br/>
         <form onsubmit="socketComment.send(document.getElementById('comment').value); return false;"> 

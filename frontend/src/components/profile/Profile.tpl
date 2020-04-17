@@ -35,7 +35,7 @@
       <div class="Profile-Posts">
         % for image in images.keys():
           <div class="Profile-Post">
-            <img class="Post-Image" id={{image}} src={{image}} alt="Cannot Veiw Image"/>
+            <img class="Post-Image" id={{image}} src=/image/{{image}} alt="Cannot Veiw Image"/>
             <br/>
             <button  class="Profile-Button" onclick="socket.send('{{image}}');"><span id="count{{image}}">{{images[image]}}</span>⭐</button>
             <br>

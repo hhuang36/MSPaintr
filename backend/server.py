@@ -92,22 +92,26 @@ def servePost():
 		try:
 			message = wsock.receive()
 
-			#write image to a file
-			#we will need to have some method of renaming the image
-			#then sending the name of that renamed image
-			file = open("../frontend/src/components/testimages/image0.png", 'w')
-			file.write(message)
+			if not message == None:
 
-			for client in server.clients.values():
-					client.ws.send("image0.png")
+				#write image to a file
+				#we will need to have some method of renaming the image
+				#then sending the name of that renamed image
+				#allimages should be saved in testimages
+				file = open("../frontend/src/components/testimages/image0.png", 'w')
+				file.write(message)
+
+				for client in server.clients.values():
+						client.ws.send("image0.png")
 
 
 		except WebSocketError:
 			break
 
-@app.route("/images/<image_name>")
+@app.route("/image/<image_name>")
 def serveImage(image_name):
-	return static_file(image_name, root="../frontend/src/components/testimages", mimetype="image/png")
+	print(image_name)
+	return static_file(image_name, root="../frontend/src/components/testimages/", mimetype="image/png")
 
 @app.get("/App.css")
 def serveAppCSS():
@@ -179,7 +183,7 @@ def serveMore(post_id):
 	"""
 	retVal = {"user_name": "", "post_image": "", "comments":[], "likes" : 0 }
 	retVal["user_name"] = "eggie"
-	retVal["post_image"] = "../" + post_id
+	retVal["post_image"] = "../image/" + post_id
 	print(post_id)
 	retVal["comments"] = [{"user": "eggie", "comment_body": "super cool!"}, {"user": "tofu", "comment_body": "i love it!!"}]
 	return retVal
@@ -188,21 +192,7 @@ def serveMore(post_id):
 def serveLogo():
 	return static_file("MSPaintRLogo.png", root="../frontend/src/components/profile/profileimages", mimetype="image/png")
 
-@app.get("/testimage.png")
-def serveLogo():
-	return static_file("testimage.png", root="../frontend/src/components/testimages", mimetype="image/png")
 
-@app.get("/testimage2.png")
-def serveLogo():
-	return static_file("testimage2.png", root="../frontend/src/components/testimages", mimetype="image/png")
-
-@app.get("/eggie.png")
-def serveLogo():
-	return static_file("eggie.png", root="../frontend/src/components/profile/profileimages", mimetype="image/png")
-
-@app.get("/subtle_lgbt.png")
-def serveLogo():
-	return static_file("subtle_lgbt.png", root="../frontend/src/components/profile/profileimages", mimetype="image/png")
 
 
 server = WSGIServer(("0.0.0.0", 8000), app, handler_class=WebSocketHandler)

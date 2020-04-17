@@ -26,13 +26,17 @@
     %image = post_image.replace("../", "")
 		<img class="Post-Image" id={{image}} src={{post_image}} alt="cannot veiw image"/>
  		 <br/>
-         <input type ="text" id="user_name" />
-        <input type ="submit" value="Add Comment"/>
+        <form onsubmit="socketComment.send(document.getElementById('comment').value); return false;"> 
+          <input type ="text" id="comment" />
+          <input type ="submit" value="Add Comment"/>
+        </form>
       
-	  	<button  class="Profile-Button" onclick="updoot('{{image}}');"><span id="count{{image}}">{{likes}}</span>⭐</button>
+	  	<button  class="Profile-Button" onclick="socket.send('{{image}}');"><span id="count{{image}}">{{likes}}</span>⭐</button>
 	  	<br>
-	  	% for comment in comments:
-        <p>{{comment["user"]}}:{{comment["comment_body"]}}</p>
-      % end
+      <div id="comments">
+  	  	% for comment in comments:
+          <p>{{comment["user"]}}:{{comment["comment_body"]}}</p>
+        % end
+      </div>
 	</div>
 </body>

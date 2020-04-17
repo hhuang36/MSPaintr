@@ -37,8 +37,7 @@
           <div class="Profile-Post">
             <img class="Post-Image" id={{image}} src={{image}} alt="Cannot Veiw Image"/>
             <br/>
-            <button  class="Profile-Button" onclick="updoot('{{image}}');"><span id="count{{image}}">{{images[image]}}</span>⭐</button>
-            <button  class="Profile-Button">💬</button>
+            <button  class="Profile-Button" onclick="socket.send('{{image}}');"><span id="count{{image}}">{{images[image]}}</span>⭐</button>
             <br>
             <a href= seemore/{{image}}>See More</a>
           </div>

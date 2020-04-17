@@ -1,13 +1,21 @@
 #Source: Bottle
 
 
-from bottle import get, route, redirect, run, static_file, view, post, request
+from bottle import get, route, redirect, run, Bottle, static_file, view, post, request
 import bottle
 import json
+from gevent.pywsgi import WSGIServer
+from geventwebsocket import WebSocketError
+from geventwebsocket.handler import WebSocketHandler
 
-bottle.TEMPLATE_PATH.insert(0, 'frontend/src/components/')
+app = Bottle()
 
-@get('/')
+
+
+bottle.TEMPLATE_PATH.insert(0, '../frontend/src/components/')
+bottle.TEMPLATES.clear()
+
+@app.get('/')
 @view("Home.tpl")
 def serve_home():
 	"""
@@ -23,42 +31,102 @@ def serve_home():
 
 	return retVal
 
-@route('/home')
+@app.route('/home')
 def getFeed():
 	redirect('/')
 
-@post("/updoot")
+@app.route("/updoot")
 def serveUpdoot():
-	image_name = json.loads(request.body.read().decode('utf-8'))
-	#Put code here to get the number of updoots for the given image and add 1 to it
-	#return said numbers
-	return json.dumps(8)
+	wsock = request.environ.get('wsgi.websocket')
+	while True:
+		try:
+			message = wsock.receive()
 
-@get("/App.css")
+			#message is the name of the image 
+			#update the image and reutrn a json object
+			#format:
+			# "imageName" : <imagename>
+			# "updoots" : <newupodots>
+
+			resp = {"imageName" : message, "updoots" : 81}
+
+			wsock.send(json.dumps(resp))
+
+		except WebSocketError:
+			break
+
+@app.route("/comment")
+def serveComment():
+	wsock = request.environ.get('wsgi.websocket')
+	while True:
+		try:
+			message = wsock.receive()
+
+			print(message)
+
+			#message is the comment in a string
+			#send the comment
+			#fomat:
+			# <username>:<message>
+
+			if  not (message == None):
+
+				msg = "eggie: " + message
+
+				wsock.send(msg)
+
+		except WebSocketError:
+			break
+
+
+@app.route("/post")
+def servePost():
+	wsock = request.environ.get('wsgi.websocket')
+	while True:
+		try:
+			message = wsock.receive()
+
+			print(message)
+
+			#message is the comment in a string
+			#send the comment
+			#fomat:
+			# <username>:<message>
+
+			if  not (message == None):
+
+				msg = "eggie: " + message
+
+				wsock.send(msg)
+
+		except WebSocketError:
+			break
+
+@app.get("/App.css")
 def serveAppCSS():
-	return static_file("App.css", root="frontend/src/", mimetype="text/css")
+	return static_file("App.css", root="../frontend/src/", mimetype="text/css")
 
-@get("/app.js")
+@app.get("/app.js")
 def serveAppCSS():
-	return static_file("app.js", root="frontend/src/", mimetype="text/javascript")
+	return static_file("app.js", root="../frontend/src/", mimetype="text/javascript")
 
-@get('/login')
+@app.get('/login')
 def serveLogin():
-	return static_file("Login.html", root="frontend/src/components/login", mimetype="text/html")
+	return static_file("Login.html", root="../frontend/src/components/login", mimetype="text/html")
 
-@get("/Login.css")
+@app.get("/Login.css")
 def serveLoginCSS():
-	return static_file("Login.css", root="frontend/src/components/login", mimetype="text/css")
+	return static_file("Login.css", root="../frontend/src/components/login", mimetype="text/css")
 
-@get("/register")
+@app.get("/register")
 def serveRegister():
-	return static_file("Regristration.html", root="frontend/src/components/register", mimetype="text/html")
+	return static_file("Regristration.html", root="../frontend/src/components/register", mimetype="text/html")
 
-@get("/Regristration.css")
+@app.get("/Regristration.css")
 def serveRegisterCSS():
-	return static_file("Regristration.css", root="frontend/src/components/register", mimetype="text/css")
+	return static_file("Regristration.css", root="../frontend/src/components/register", mimetype="text/css")
 
-@get("/profile")
+@app.get("/profile")
 @view("profile/Profile.tpl",)
 def serveProfile():
 	"""
@@ -74,23 +142,23 @@ def serveProfile():
 
 	return retVal
 
-@get("/Profile.css")
+@app.get("/Profile.css")
 def serveProfileCSS():
-	return static_file("Profile.css", root="frontend/src/components/profile", mimetype="text/css")
+	return static_file("Profile.css", root="../frontend/src/components/profile", mimetype="text/css")
 
-@get("/directmessages")
+@app.get("/directmessages")
 def serveDMS():
-	return static_file("DirectMessages.html", root="frontend/src/components/dms", mimetype="text/html")
+	return static_file("DirectMessages.html", root="../frontend/src/components/dms", mimetype="text/html")
 
-@get("/DirectMessages.css")
+@app.get("/DirectMessages.css")
 def serveDMSCSS():
-	return static_file("DirectMessages.css", root="frontend/src/components/dms", mimetype="text/css")
+	return static_file("DirectMessages.css", root="../frontend/src/components/dms", mimetype="text/css")
 
-@get("/newpost")
+@app.get("/newpost")
 def serveNewPost():
-	return static_file("NewPost.html", root="frontend/src/components", mimetype="text/html")
+	return static_file("NewPost.html", root="../frontend/src/components", mimetype="text/html")
 
-@get("/seemore/<post_id>")
+@app.get("/seemore/<post_id>")
 @view("SeeMore.tpl")
 def serveMore(post_id):
 	"""
@@ -109,25 +177,26 @@ def serveMore(post_id):
 	retVal["comments"] = [{"user": "eggie", "comment_body": "super cool!"}, {"user": "tofu", "comment_body": "i love it!!"}]
 	return retVal
 
-@get("/MSPaintRLogo.png")
+@app.get("/MSPaintRLogo.png")
 def serveLogo():
-	return static_file("MSPaintRLogo.png", root="frontend/src/components/profile/profileimages", mimetype="image/png")
+	return static_file("MSPaintRLogo.png", root="../frontend/src/components/profile/profileimages", mimetype="image/png")
 
-@get("/testimage.png")
+@app.get("/testimage.png")
 def serveLogo():
-	return static_file("testimage.png", root="frontend/src/components/testimages", mimetype="image/png")
+	return static_file("testimage.png", root="../frontend/src/components/testimages", mimetype="image/png")
 
-@get("/testimage2.png")
+@app.get("/testimage2.png")
 def serveLogo():
-	return static_file("testimage2.png", root="frontend/src/components/testimages", mimetype="image/png")
+	return static_file("testimage2.png", root="../frontend/src/components/testimages", mimetype="image/png")
 
-@get("/eggie.png")
+@app.get("/eggie.png")
 def serveLogo():
-	return static_file("eggie.png", root="frontend/src/components/profile/profileimages", mimetype="image/png")
+	return static_file("eggie.png", root="../frontend/src/components/profile/profileimages", mimetype="image/png")
 
-@get("/subtle_lgbt.png")
+@app.get("/subtle_lgbt.png")
 def serveLogo():
-	return static_file("subtle_lgbt.png", root="frontend/src/components/profile/profileimages", mimetype="image/png")
+	return static_file("subtle_lgbt.png", root="../frontend/src/components/profile/profileimages", mimetype="image/png")
 
 
-run(host='0.0.0.0', port=8000)
+server = WSGIServer(("0.0.0.0", 8000), app, handler_class=WebSocketHandler)
+server.serve_forever()

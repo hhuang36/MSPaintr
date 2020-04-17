@@ -50,7 +50,10 @@ def serveUpdoot():
 
 			resp = {"imageName" : message, "updoots" : 81}
 
-			wsock.send(json.dumps(resp))
+			for client in server.clients.values():
+				client.ws.send(json.dumps(resp))
+
+			
 
 		except WebSocketError:
 			break
@@ -73,7 +76,10 @@ def serveComment():
 
 				msg = "eggie: " + message
 
-				wsock.send(msg)
+				for client in server.clients.values():
+					client.ws.send(msg)
+
+				
 
 		except WebSocketError:
 			break
@@ -92,7 +98,8 @@ def servePost():
 			file = open("../frontend/src/components/testimages/image0.png", 'w')
 			file.write(message)
 
-			wsock.send("image0.png")
+			for client in server.clients.values():
+					client.ws.send("image0.png")
 
 
 		except WebSocketError:

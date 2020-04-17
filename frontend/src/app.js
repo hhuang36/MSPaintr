@@ -30,3 +30,11 @@ function submitPost(){
 	}
 	reader.readAsArrayBuffer(file)
 }
+
+socketPost.onmessage = function(evt){
+
+	imgname = evt.data
+
+
+}
+

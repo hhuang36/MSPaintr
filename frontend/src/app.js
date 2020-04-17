@@ -17,4 +17,16 @@ socketComment.onmessage = function(evt){
 }
 
 
-socketPost = new WebSocket("ws://localhost:8000/")
+socketPost = new WebSocket("ws://localhost:8000/post")
+
+function submitPost(){
+	file = document.getElementById("name").files[0]
+	reader = new FileReader();
+	data = new ArrayBuffer();
+	reader.loadend= function(){}
+	reader.onload= function(evt){
+		data = evt.target.result;
+		socketPost.send(data)
+	}
+	reader.readAsArrayBuffer(file)
+}

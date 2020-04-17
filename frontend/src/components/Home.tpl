@@ -29,8 +29,6 @@
 				<p>POSTED BY: {{post["user_name"]}}</p>
 				<img class="Post-Image" id={{post["post_id"]}} src={{post["post_image"]}} alt="Cannot Veiw Image"/>
 	     		 <br/>
-		         <input type ="text" id="user_name" />
-		        <input type ="submit" value="Add Comment"/>
 			  	<button  class="Profile-Button" onclick="socket.send('{{post["post_image"]}}');"><span id="count{{post["post_image"]}}">{{post["likes"]}}</span>⭐</button>
 			  	<br>
 			  	<a href= seemore/{{post["post_id"]}}>See More</a>

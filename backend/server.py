@@ -86,21 +86,21 @@ def servePost():
 		try:
 			message = wsock.receive()
 
-			print(message)
+			#write image to a file
+			#we will need to have some method of renaming the image
+			#then sending the name of that renamed image
+			file = open("../frontend/src/components/testimages/image0.png", 'w')
+			file.write(message)
 
-			#message is the comment in a string
-			#send the comment
-			#fomat:
-			# <username>:<message>
+			wsock.send("image0.png")
 
-			if  not (message == None):
-
-				msg = "eggie: " + message
-
-				wsock.send(msg)
 
 		except WebSocketError:
 			break
+
+@app.route("/images/<image_name>")
+def serveImage(image_name):
+	return static_file(image_name, root="../frontend/src/components/testimages", mimetype="image/png")
 
 @app.get("/App.css")
 def serveAppCSS():

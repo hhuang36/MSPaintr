@@ -22,7 +22,7 @@
       <br />
     </div>
 	<img src="MSPaintRLogo.png" class="Profile-Logo"/>
-	<div class="SubscriptionFeed">
+	<div class="SubscriptionFeed" id= "Subs">
 		% for post in posts:
 			<div class="Post">
 			

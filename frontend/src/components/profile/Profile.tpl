@@ -32,7 +32,7 @@
           <p>{{user_bio}}</p>
           <br/>
         </div>
-      <div class="Profile-Posts">
+      <div class="Profile-Posts" id="Subs">
         % for image in images.keys():
           <div class="Profile-Post">
             <img class="Post-Image" id={{image}} src=/image/{{image}} alt="Cannot Veiw Image"/>

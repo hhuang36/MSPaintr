@@ -33,8 +33,46 @@ function submitPost(){
 
 socketPost.onmessage = function(evt){
 
-	imgname = evt.data
+	info = JSON.parse(evt.data)
 
+	img = info["imagename"]
+	user = info["username"]
 
+	outer = document.createElement("DIV")
+	outer.className = "Post"
+
+	para = document.createElement("P")
+	para.innerHTML = "POSTED BY: " + user
+
+	image = document.createElement("IMG")
+
+	image.src = "/image/" + img
+	image.className = "Post-Image"
+	image.id = img
+	image.alt = "Cannot Veiw Image"
+
+	button = document.createElement("BUTTON")
+	button.className = "Profile-Button"
+	button.onclick = "socket.send('imagename');"
+
+	spann = document.createElement("SPAN")
+	spann.id = img 
+	spann.innerHTML = 0
+
+	button.appendChild(spann)
+	button.appendChild(document.createTextNode("⭐"))
+
+	seemore = document.createElement("A")
+	seemore.href= "seemore/" + img
+	seemore.innerHTML = "See More"
+
+	outer.appendChild(para)
+	outer.appendChild(image)
+	outer.appendChild(document.createElement("BR"))
+	outer.appendChild(button)
+	outer.appendChild(document.createElement("BR"))
+	outer.appendChild(seemore)
+
+	document.getElementById("Subs").appendChild(outer)
 }
 

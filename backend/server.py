@@ -27,12 +27,12 @@ sql_stmt = (
 	"INSERT INTO Users (username, password, bio, followers) "
 	"VALUES (%s, %s, %s, %s)"
 )
-val = ("defaultuser", "defaultpass", "This is the default bio.", "0")
+val = ("eggie", "defaultpass", "This is the default bio.", "0")
 mycursor.execute(sql_stmt, val)
 mydb.commit()
 
 testpost = ("INSERT INTO Posts (postid, image, upvotes, Users_username) VALUES (%s, %s, %s, %s)")
-testvals = ("eggie.png", "eggie.png", "0", "defaultuser")
+testvals = ("eggie.png", "eggie.png", "0", "eggie")
 mycursor.execute(testpost, testvals)
 mydb.commit()
 

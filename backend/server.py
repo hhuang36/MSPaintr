@@ -7,10 +7,34 @@ import json
 from gevent.pywsgi import WSGIServer
 from geventwebsocket import WebSocketError
 from geventwebsocket.handler import WebSocketHandler
+import mysql.connector
 
 app = Bottle()
 
+mydb = mysql.connector.connect(host="mysqldb",
+							   user="default",
+							   passwd="changeme",
+							   database="mspaintrdb"
+							   )
+mycursor = mydb.cursor()
+mycursor.execute("CREATE TABLE IF NOT EXISTS Users(username VARCHAR(20) NOT NULL, password VARCHAR(45), "
+				 "bio VARCHAR(255), followers INT)")
+mycursor.execute("CREATE TABLE IF NOT EXISTS Posts (postid VARCHAR(255), image VARCHAR(255), upvotes INT, "
+				 "Users_username VARCHAR (20))")
+mycursor.execute("CREATE TABLE IF NOT EXISTS Comments(commentid INT, comment VARCHAR(255), Posts_postid VARCHAR(255),"
+				 "Users_username VARCHAR(20))")
+sql_stmt = (
+	"INSERT INTO Users (username, password, bio, followers) "
+	"VALUES (%s, %s, %s, %s)"
+)
+val = ("defaultuser", "defaultpass", "This is the default bio.", "0")
+mycursor.execute(sql_stmt, val)
+mydb.commit()
 
+testpost = ("INSERT INTO Posts (postid, image, upvotes, Users_username) VALUES (%s, %s, %s, %s)")
+testvals = ("eggie.png", "eggie.png", "0", "defaultuser")
+mycursor.execute(testpost, testvals)
+mydb.commit()
 
 bottle.TEMPLATE_PATH.insert(0, '../frontend/src/components/')
 bottle.TEMPLATES.clear()
@@ -27,7 +51,15 @@ def serve_home():
 	likes is an integer containing the number of likes a post has
 	"""
 	retVal = {"posts":[]}
-	retVal["posts"] = [{"user_name": "eggie", "post_image": "eggie.png", "post_id": "eggie.png", "likes" : 8},{"likes": 9, "user_name": "eggie", "post_image": "testimage.png", "post_id": "testimage.png"}]
+	mycursor.execute('SELECT * FROM Posts')
+	row = mycursor.fetchone()
+	posts = []
+	while row is not None:
+		postDetails = {"user_name": row[3], "post_image": row[1], "post_id": row[0], "likes": row[2]}
+		posts.append(postDetails)
+		row = mycursor.fetchone()
+	retVal["posts"] = posts
+	return retVal
 
 	return retVal
 

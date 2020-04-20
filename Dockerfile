@@ -1,9 +1,10 @@
-FROM ubuntu:18.04
+FROM python:3
 
 RUN apt-get update
 RUN apt-get update --fix-missing
 RUN apt-get install -y apt-utils
-RUN apt-get install -y python3
+RUN apt-get install -y python3-pip
+
 
 ENV HOME /root
 
@@ -13,6 +14,13 @@ COPY . .
 
 EXPOSE 8000
 
-RUN apt-get install -y python-bottle
-
-CMD ["python", "backend/server.py"]
+RUN pip install --upgrade pip
+RUN pip install bottle
+RUN pip install bottle-mysql
+RUN pip install mysqlclient
+RUN pip install mysql-connector-python
+RUN pip install gevent
+RUN pip install gevent-websocket
+ADD  https://github.com/ufoscout/docker-compose-wait/releases/download/2.2.1/wait /wait
+RUN chmod +x /wait
+CMD /wait && python backend/server.py

@@ -1,23 +1,52 @@
 
 
-socket = new WebSocket("ws://localhost:8000/updoot")
+socket = new WebSocket("ws://" + window.location.host + "/updoot")
 
 socket.onmessage = function(evt){ 
+
 	response = JSON.parse(evt.data)
+	if( response["type"] != "updoot"){
+		return;
+	}
+	
 	document.getElementById("count" + response["imageName"]).innerHTML = response["updoots"]
 }
 
-socketComment = new WebSocket("ws://localhost:8000/comment")
+socketComment = new WebSocket("ws://" + window.location.host + "/comment")
 
 socketComment.onmessage = function(evt){ 
+	response = JSON.parse(evt.data)
+	if( response["type"] != "comment"){
+		return false;
+	}
+
+	if(!document.getElementById(response["image"] ) || !document.getElementById("comments") ){
+		return false;
+	}
+
 	comms = document.getElementById("comments")
 	prep = document.createElement("P")
-	prep.appendChild(document.createTextNode(evt.data))
+	prep.appendChild(document.createTextNode(response["message"]))
 	comms.appendChild(prep)
 }
 
+function sendComment(imagename) {
 
-socketPost = new WebSocket("ws://localhost:8000/post")
+	comm = document.getElementById('comment').value
+
+	resp = {'type' : 'comment', 'message' : comm, 'image' : imagename}
+	
+	socketComment.send(JSON.stringify(resp))
+}
+
+function sendUpdoot(img_name){
+	resp = {'type' : 'updoot', 'message' : img_name}
+
+	socket.send(JSON.stringify(resp))
+}
+	
+
+socketPost = new WebSocket("ws://" + window.location.host + "/post")
 
 function submitPost(){
 	file = document.getElementById("name").files[0]
@@ -34,6 +63,11 @@ function submitPost(){
 socketPost.onmessage = function(evt){
 
 	info = JSON.parse(evt.data)
+
+	if( info["type"] != "image"){
+		return;
+	}
+		
 
 	img = info["imagename"]
 	user = info["username"]
@@ -53,7 +87,7 @@ socketPost.onmessage = function(evt){
 
 	button = document.createElement("BUTTON")
 	button.className = "Profile-Button"
-	button.onclick = "socket.send('imagename');"
+	button.onclick = sendUpdoot(img)
 
 	spann = document.createElement("SPAN")
 	spann.id = img 

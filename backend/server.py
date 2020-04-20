@@ -12,7 +12,7 @@ app = Bottle()
 
 
 
-bottle.TEMPLATE_PATH.insert(0, 'frontend/src/components/')
+bottle.TEMPLATE_PATH.insert(0, '../frontend/src/components/')
 bottle.TEMPLATES.clear()
 
 @app.get('/')
@@ -43,18 +43,22 @@ def serveUpdoot():
 			message = wsock.receive()
 
 			if not(message == None):
-				
-				#message is the name of the image 
-				#update the image and reutrn a json object
-				#format:
-				# "imageName" : <imagename>
-				# "updoots" : <newupodots>
+
+				messy = json.loads(message)
+
+				if messy["type"] == 'updoot':
+					
+					#message is the name of the image 
+					#update the image and reutrn a json object
+					#format:
+					# "imageName" : <imagename>
+					# "updoots" : <newupodots>
 
 
-				resp = {"imageName" : message, "updoots" : 81}
+					resp = {"type" : "updoot", "imageName" : messy["message"], "updoots" : 81}
 
-				for client in server.clients.values():
-					client.ws.send(json.dumps(resp))
+					for client in server.clients.values():
+						client.ws.send(json.dumps(resp))
 
 			
 
@@ -77,10 +81,18 @@ def serveComment():
 
 			if  not (message == None):
 
-				msg = "eggie: " + message
+				messy = json.loads(message)
 
-				for client in server.clients.values():
-					client.ws.send(msg)
+				if messy["type"] == 'comment':
+
+					#this is where you should update the database
+
+					msg = "eggie: " + messy["message"]
+
+					resp = {"type" : "comment", "message" : msg, "image" : messy["image"]}
+
+					for client in server.clients.values():
+						client.ws.send(json.dumps(resp))
 
 				
 
@@ -97,18 +109,19 @@ def servePost():
 
 			if not (message == None):
 
+
 				#write image to a file
 				#we will need to have some method of renaming the image
 				#then sending the name of that renamed image
 				#allimages should be saved in testimages
-				file = open("frontend/src/components/testimages/image0.png", 'w')
+				file = open("../frontend/src/components/testimages/image0.png", 'w')
 				file.write(message)
 
 				#send a json witht the image and the user who posted it
 				#format
 				#imagename holds a string of the image just uploaded
 				#username holds a string of who posted it
-				retVal = {"imagename" : "image0.png", "username" : "eggie"}
+				retVal = {"type" : "image", "imagename" : "image0.png", "username" : "eggie"}
 
 				for client in server.clients.values():
 						client.ws.send(json.dumps(retVal))
@@ -120,31 +133,31 @@ def servePost():
 @app.route("/image/<image_name>")
 def serveImage(image_name):
 	print(image_name)
-	return static_file(image_name, root="frontend/src/components/testimages/", mimetype="image/png")
+	return static_file(image_name, root="../frontend/src/components/testimages/", mimetype="image/png")
 
 @app.get("/App.css")
 def serveAppCSS():
-	return static_file("App.css", root="frontend/src/", mimetype="text/css")
+	return static_file("App.css", root="../frontend/src/", mimetype="text/css")
 
 @app.get("/app.js")
 def serveAppCSS():
-	return static_file("app.js", root="frontend/src/", mimetype="text/javascript")
+	return static_file("app.js", root="../frontend/src/", mimetype="text/javascript")
 
 @app.get('/login')
 def serveLogin():
-	return static_file("Login.html", root="frontend/src/components/login", mimetype="text/html")
+	return static_file("Login.html", root="../frontend/src/components/login", mimetype="text/html")
 
 @app.get("/Login.css")
 def serveLoginCSS():
-	return static_file("Login.css", root="frontend/src/components/login", mimetype="text/css")
+	return static_file("Login.css", root="../frontend/src/components/login", mimetype="text/css")
 
 @app.get("/register")
 def serveRegister():
-	return static_file("Regristration.html", root="frontend/src/components/register", mimetype="text/html")
+	return static_file("Regristration.html", root="../frontend/src/components/register", mimetype="text/html")
 
 @app.get("/Regristration.css")
 def serveRegisterCSS():
-	return static_file("Regristration.css", root="frontend/src/components/register", mimetype="text/css")
+	return static_file("Regristration.css", root="../frontend/src/components/register", mimetype="text/css")
 
 @app.get("/profile")
 @view("profile/Profile.tpl",)
@@ -164,19 +177,19 @@ def serveProfile():
 
 @app.get("/Profile.css")
 def serveProfileCSS():
-	return static_file("Profile.css", root="frontend/src/components/profile", mimetype="text/css")
+	return static_file("Profile.css", root="../frontend/src/components/profile", mimetype="text/css")
 
 @app.get("/directmessages")
 def serveDMS():
-	return static_file("DirectMessages.html", root="frontend/src/components/dms", mimetype="text/html")
+	return static_file("DirectMessages.html", root="../frontend/src/components/dms", mimetype="text/html")
 
 @app.get("/DirectMessages.css")
 def serveDMSCSS():
-	return static_file("DirectMessages.css", root="frontend/src/components/dms", mimetype="text/css")
+	return static_file("DirectMessages.css", root="../frontend/src/components/dms", mimetype="text/css")
 
 @app.get("/newpost")
 def serveNewPost():
-	return static_file("NewPost.html", root="frontend/src/components", mimetype="text/html")
+	return static_file("NewPost.html", root="../frontend/src/components", mimetype="text/html")
 
 @app.get("/seemore/<post_id>")
 @view("SeeMore.tpl")
@@ -199,7 +212,7 @@ def serveMore(post_id):
 
 @app.get("/MSPaintRLogo.png")
 def serveLogo():
-	return static_file("MSPaintRLogo.png", root="frontend/src/components/profile/profileimages", mimetype="image/png")
+	return static_file("MSPaintRLogo.png", root="../frontend/src/components/profile/profileimages", mimetype="image/png")
 
 
 

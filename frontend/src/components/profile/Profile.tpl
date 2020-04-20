@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 	<link rel="stylesheet" type="text/css" href="Profile.css"/>
+  <script src="app.js"></script>
 	<title>Profile</title>
 </head>
 <body>
@@ -22,28 +23,26 @@
 	<img src="MSPaintRLogo.png" class="Profile-Logo"/>
 	<div class="Profile">
       <div class="Profile-Side">
-          <p>"xX_lucid_Xx"<p/>
-          <br/>
-          <img class="Prof-Image" src="subtle_lgbt.png" alt="This is a pic"/>
-          <br/>
+          <p>{{user_name}}<p/>
+          
           <button class="Profile-Button">💌</button>
           <span>&nbsp;</span>
-          <button class="Profile-Button"> 420 🐑 </button>
+          <button class="Profile-Button"> 🐑 </button>
           <br/>
-          <p>"Wassup my dudes?!? My name Jeff. I am an ~ARIST~"</p>
+          <p>{{user_bio}}</p>
           <br/>
         </div>
-      <div class="Profile-Posts">
+      <div class="Profile-Posts" id="Subs">
+        % for image in images.keys():
           <div class="Profile-Post">
-      <img class="Post-Image" src="eggie.png" alt="Cannot Veiw Image"/>
-      <br/>
-      <button  class="Profile-Button">⭐</button>
-      <button  class="Profile-Button">💬</button>
-      <br/>
-      <p>I want some eggs</p>
-    </div>
+            <img class="Post-Image" id={{image}} src=/image/{{image}} alt="Cannot Veiw Image"/>
+            <br/>
+            <button  class="Profile-Button" onclick="sendUpdoot('{{image}}');"><span id="count{{image}}">{{images[image]}}</span>⭐</button>
+            <br>
+            <a href= seemore/{{image}}>See More</a>
+          </div>
+        % end
         </div>
     </div>
 </body>
 
-<!--- note to self: convert this to templating but not now>

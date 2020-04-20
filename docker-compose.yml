@@ -1,0 +1,18 @@
+version: '3.3'
+services:
+  mysqldb:
+    image: mysql:latest
+    expose:
+      - "3306"
+    environment:
+      MYSQL_ROOT_USER: 'root'
+      MYSQL_ROOT_PASSWORD: 'changeme'
+      MYSQL_DATABASE: 'mspaintrdb'
+      MYSQL_USER: 'default'
+      MYSQL_PASSWORD: 'changeme'
+  app:
+    build: .
+    ports:
+      - "8080:8000"
+    environment:
+      WAIT_HOSTS: mysqldb:3306

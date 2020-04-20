@@ -1,6 +1,7 @@
 <head>
 	<link rel="stylesheet" type="text/css" href="/App.css"/>
 	<title>New Post</title>
+  <script src="app.js"></script>
 </head>
 <body>
 	<div class="LeftAlign">
@@ -20,14 +21,12 @@
   </div>
 
   <div class="Post">
-    <form enctype="multipart/form-data" id="Form">
         <label>
           Add your Image!
         </label>
           <br/>
          <input type="file" id="name" name="name"><br>
-        <input type="submit" value="Add Image!">
-      </form>
+        <input type="button" value="Add Image!" onclick="submitPost()">
     </div>
   </div>
 </body>

@@ -212,8 +212,20 @@ def serveProfileCSS():
 	return static_file("Profile.css", root="frontend/src/components/profile", mimetype="text/css")
 
 @app.get("/directmessages")
+@view("dms/DirectMessages.tpl")
 def serveDMS():
-	return static_file("DirectMessages.html", root="frontend/src/components/dms", mimetype="text/html")
+	retVal = {"followers": [], "messager" : "", "messages": []}
+	"""
+	format: 
+	followers is a list of everyone you follow
+	messsager is the person you are currentlly messaging
+	messagers is a list of lists containing all messges sent to that person
+	list format:
+	 the first element is the senders
+	 the second element is the message
+	"""
+
+	return retVal
 
 @app.get("/DirectMessages.css")
 def serveDMSCSS():

@@ -65,7 +65,7 @@ socketPost.onmessage = function(evt){
 	info = JSON.parse(evt.data)
 
 	if( info["type"] != "image"){
-		return;
+		return false;
 	}
 		
 
@@ -110,3 +110,23 @@ socketPost.onmessage = function(evt){
 	document.getElementById("Subs").appendChild(outer)
 }
 
+socketMessage = new WebSocket("ws://" + window.location.host + "/message")
+
+function messageSend(){
+	msg = document.getElementById("textbox").value
+
+	reciever = document.getElementById("messager").value
+
+	info = {"messagee" : reciever, "message" : msg, "type" : "message"}
+
+	socketMessage.send(JSON.stringify(info))
+}
+
+socketMessage.onmessage = function(evt){
+	response = JSON.parse(evt.data)
+	if(response["type"] != "message"){
+		return false;
+	}
+
+	//need some way of determining user
+}

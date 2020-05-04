@@ -13,30 +13,31 @@ import random
 
 app = Bottle()
 
-# mydb = mysql.connector.connect(host="mysqldb",
-# 							   user="default",
-# 							   passwd="changeme",
-# 							   database="mspaintrdb"
-# 							   )
-# mycursor = mydb.cursor()
-# mycursor.execute("CREATE TABLE IF NOT EXISTS Users(username VARCHAR(20) NOT NULL, password VARCHAR(45), "
-# 				 "bio VARCHAR(255), followers INT)")
-# mycursor.execute("CREATE TABLE IF NOT EXISTS Posts (postid VARCHAR(255), image VARCHAR(255), upvotes INT, "
-# 				 "Users_username VARCHAR (20))")
-# mycursor.execute("CREATE TABLE IF NOT EXISTS Comments(commentid INT, comment VARCHAR(255), Posts_postid VARCHAR(255),"
-# 				 "Users_username VARCHAR(20))")
-# sql_stmt = (
-# 	"INSERT INTO Users (username, password, bio, followers) "
-# 	"VALUES (%s, %s, %s, %s)"
-# )
-# val = ("eggie", "defaultpass", "This is the default bio.", "0")
-# mycursor.execute(sql_stmt, val)
-# mydb.commit()
-#
-# testpost = ("INSERT INTO Posts (postid, image, upvotes, Users_username) VALUES (%s, %s, %s, %s)")
-# testvals = ("eggie.png", "eggie.png", "0", "eggie")
-# mycursor.execute(testpost, testvals)
-# mydb.commit()
+mydb = mysql.connector.connect(host="mysqldb",
+							   user="default",
+							   passwd="changeme",
+							   database="mspaintrdb"
+							   )
+mycursor = mydb.cursor()
+mycursor.execute("CREATE TABLE IF NOT EXISTS Tokens(usern VARCHAR(20), token VARCHAR(16))")
+mycursor.execute("CREATE TABLE IF NOT EXISTS Users(username VARCHAR(20) NOT NULL, password VARCHAR(45), "
+				 "bio VARCHAR(255), followers INT)")
+mycursor.execute("CREATE TABLE IF NOT EXISTS Posts (postid VARCHAR(255), image VARCHAR(255), upvotes INT, "
+				 "Users_username VARCHAR (20))")
+mycursor.execute("CREATE TABLE IF NOT EXISTS Comments(commentid INT, comment VARCHAR(255), Posts_postid VARCHAR(255),"
+				 "Users_username VARCHAR(20))")
+sql_stmt = (
+	"INSERT INTO Users (username, password, bio, followers) "
+	"VALUES (%s, %s, %s, %s)"
+)
+val = ("eggie", "defaultpass", "This is the default bio.", "0")
+mycursor.execute(sql_stmt, val)
+mydb.commit()
+
+testpost = ("INSERT INTO Posts (postid, image, upvotes, Users_username) VALUES (%s, %s, %s, %s)")
+testvals = ("eggie.png", "eggie.png", "0", "eggie")
+mycursor.execute(testpost, testvals)
+mydb.commit()
 
 bottle.TEMPLATE_PATH.insert(0, 'frontend/src/components/')
 bottle.TEMPLATES.clear()
@@ -96,8 +97,6 @@ def serveUpdoot():
                     for client in server.clients.values():
                         client.ws.send(json.dumps(resp))
 
-
-
         except WebSocketError:
             break
 
@@ -106,69 +105,49 @@ def serveUpdoot():
 def confirmLogin():
     username = request.forms["user"]
     password = request.forms["passwd"]
-    print(username)
-    print(password)
-    file = open("../frontend/src/components/login/users.csv", "r")
-    for line in file:
-        credentials = line.split(",")
-        if credentials[0] == str(username):
-            if bcrypt.checkpw(str(password).encode('utf-8'), str(credentials[1][0:len(credentials[1])-1]).encode('utf-8')):
-                sessions = open("../frontend/src/components/login/sessions.csv", 'a')
-                token = generateToken()
-                print(token)
-                sessions.write(str(username) + "," + token + "\n")
-                bottle.response.add_header('Set-Cookie', "token=" + token)
-                return "Confirmed."
-            else:
-                return "Incorrect Password."
-
-    return "User does not exist."
-# 				mycursor.execute('SELECT * FROM Users WHERE username=' + username)
-# 				row = mycursor.fetchone()
-# 				if row is not None:
-# 					if bcrypt.checkpw(password, row["password"]):
-# 						redirect('/')
-# 					else:
-# 						resp = bottle.HTTPError("Incorrect credentials.")
-# 						return resp
-# 				else:
-# 					resp = bottle.HTTPError("User not found.")
-# 					return resp
+    select = "SELECT * FROM Users WHERE username= %s"
+    mycursor.execute(select, (username,))
+    row = mycursor.fetchone()
+    if row is not None:
+        if bcrypt.checkpw(str(password).encode('utf-8'), str(row["password"]).encode('utf-8')):
+            token = generateToken()
+            print(token)
+            sql_stmt = ("INSERT INTO Tokens (usern, token) VALUES (%s, %s)")
+            val = (username, token)
+            mycursor.execute(sql_stmt, val)
+            mydb.commit()
+            bottle.response.add_header('Set-Cookie', "token=" + token)
+            redirect('/')
+        else:
+            return "Incorrect credentials."
+    else:
+        return "User not found."
 
 @app.post("/register-process")
 def processRegister():
     username = request.forms["username"]
     password = request.forms["password"]
-    users = open("../frontend/src/components/login/users.csv", "r")
-    for line in users:
-        credentials = line.split(",")
-        if credentials[0] == str(username):
-            return "Username already in use."
+    # # this is where you should check if password meets criteria
+    # # if it does hash the pw and store it in the database
+    select = "SELECT * FROM Users WHERE username= %s"
+    mycursor.execute(select, (username,))
+    row = mycursor.fetchone()
+    if row is not None:
+        return "Username already in use."
 
     if checkCriteria(str(password)) == "valid":
-        hashedpw = bcrypt.hashpw(str(password).encode('utf-8'), bcrypt.gensalt())
-        print(username)
-        print(password)
-        file = open("../frontend/src/components/login/users.csv", 'a')
-        file.write(str(username) + "," + str(hashedpw.decode('utf-8')) + "\n")
+        hashedpw = saltAndHash(password)
+        hashedpw = str(hashedpw.decode('utf-8'))
+        sql_stmt = (
+    		"INSERT INTO Users (username, password, bio, followers) "
+    		"VALUES (%s, %s, %s, %s)"
+    	)
+        val = (username, hashedpw, "This is the default bio.", "0")
+        mycursor.execute(sql_stmt, val)
+        mydb.commit()
         return "Successfully registered."
     else:
         return checkCriteria(str(password))
-    # # this is where you should check if password meets criteria
-    # # if it does hash the pw and store it in the database
-    # if checkCriteria(password) == "valid":
-    # 	hashedpw = saltAndHash(password)
-    # 	sql_stmt = (
-    # 		"INSERT INTO Users (username, password, bio, followers) "
-    # 		"VALUES (%s, %s, %s, %s)"
-    # 	)
-    # 	val = (username, hashedpw, "This is the default bio.", "0")
-    # 	mycursor.execute(sql_stmt, val)
-    # 	mydb.commit()
-    # else:
-    # 	resp = checkCriteria(password)
-    # 	return resp
-    # redirect('/login')
 
 
 @app.route("/comment")
@@ -336,7 +315,7 @@ def serveLogo():
 
 
 def saltAndHash(password):
-    hashedpw = bcrypt.hashpw(password, bcrypt.gensalt())
+    hashedpw = bcrypt.hashpw(str(password).encode('utf-8'), bcrypt.gensalt())
     return hashedpw
 
 
@@ -347,7 +326,6 @@ def checkCriteria(password):
         return "Password must contain an uppcase character."
     if not any(char.isdigit() for char in password):
         return "Password must contain a number."
-
     return "valid"
 
 
@@ -363,6 +341,5 @@ def generateToken():
     return token
 
 
-if __name__ == "__main__":
-    server = WSGIServer(("0.0.0.0", 8000), app, handler_class=WebSocketHandler)
-    server.serve_forever()
+server = WSGIServer(("0.0.0.0", 8000), app, handler_class=WebSocketHandler)
+server.serve_forever()

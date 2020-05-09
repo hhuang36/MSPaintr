@@ -11,6 +11,7 @@ import mysql.connector
 
 app = Bottle()
 
+
 mydb = mysql.connector.connect(host="mysqldb",
 							   user="default",
 							   passwd="changeme",
@@ -36,8 +37,13 @@ testvals = ("eggie.png", "eggie.png", "0", "eggie")
 mycursor.execute(testpost, testvals)
 mydb.commit()
 
-bottle.TEMPLATE_PATH.insert(0, 'frontend/src/components/')
+
+
+testing = ""
+
+bottle.TEMPLATE_PATH.insert(0, testing + 'frontend/src/components/')
 bottle.TEMPLATES.clear()
+
 
 @app.get('/')
 @view("Home.tpl")
@@ -51,6 +57,7 @@ def serve_home():
 	likes is an integer containing the number of likes a post has
 	"""
 	retVal = {"posts":[]}
+
 	mycursor.execute('SELECT * FROM Posts')
 	row = mycursor.fetchone()
 	posts = []
@@ -59,7 +66,7 @@ def serve_home():
 		posts.append(postDetails)
 		row = mycursor.fetchone()
 	retVal["posts"] = posts
-	return retVal
+
 
 	return retVal
 
@@ -146,7 +153,7 @@ def servePost():
 				#we will need to have some method of renaming the image
 				#then sending the name of that renamed image
 				#allimages should be saved in testimages
-				file = open("frontend/src/components/testimages/image0.png", 'w')
+				file = open(testing + "frontend/src/components/testimages/image0.png", 'w')
 				file.write(message)
 
 				#send a json witht the image and the user who posted it
@@ -162,34 +169,72 @@ def servePost():
 		except WebSocketError:
 			break
 
+@app.route("/message")
+def serveMessage():
+	wsock = request.environ.get('wsgi.websocket')
+	while True:
+		try:
+			message = wsock.receive()
+
+			if not(message == None):
+
+				messy = json.loads(message)
+
+					#message in messy is the message
+					#massagee in messy is who the message is sent too
+
+				if messy["type"] == "message":
+					print(messy)
+					"""
+					messy contains 2 other keys, "messagee" who is the person to recieve the message
+					and "message" which is the message itself
+					"""
+
+					#add message to database
+
+					retVal = {"messagee" : "", "messager": "", "message": "", "type": "message"}
+
+					retVal["messagee"] = messy["messagee"]
+					retVal["messager"] = "eggie"
+					retVal["message"] = messy["message"]
+
+					#figure out how to send to specific cleitns
+					#mess around with this with register
+
+					for client in server.clients.values():
+						client.ws.send(json.dumps(retVal))
+
+		except WebSocketError:
+			break
+
 @app.route("/image/<image_name>")
 def serveImage(image_name):
 	print(image_name)
-	return static_file(image_name, root="frontend/src/components/testimages/", mimetype="image/png")
+	return static_file(image_name, root=testing + "frontend/src/components/testimages/", mimetype="image/png")
 
 @app.get("/App.css")
 def serveAppCSS():
-	return static_file("App.css", root="frontend/src/", mimetype="text/css")
+	return static_file("App.css", root=testing + "frontend/src/", mimetype="text/css")
 
 @app.get("/app.js")
 def serveAppCSS():
-	return static_file("app.js", root="frontend/src/", mimetype="text/javascript")
+	return static_file("app.js", root=testing + "frontend/src/", mimetype="text/javascript")
 
 @app.get('/login')
 def serveLogin():
-	return static_file("Login.html", root="frontend/src/components/login", mimetype="text/html")
+	return static_file("Login.html", root=testing + "frontend/src/components/login", mimetype="text/html")
 
 @app.get("/Login.css")
 def serveLoginCSS():
-	return static_file("Login.css", root="frontend/src/components/login", mimetype="text/css")
+	return static_file("Login.css", root=testing + "frontend/src/components/login", mimetype="text/css")
 
 @app.get("/register")
 def serveRegister():
-	return static_file("Regristration.html", root="frontend/src/components/register", mimetype="text/html")
+	return static_file("Regristration.html", root=testing + "frontend/src/components/register", mimetype="text/html")
 
 @app.get("/Regristration.css")
 def serveRegisterCSS():
-	return static_file("Regristration.css", root="frontend/src/components/register", mimetype="text/css")
+	return static_file("Regristration.css", root=testing + "frontend/src/components/register", mimetype="text/css")
 
 @app.get("/profile")
 @view("profile/Profile.tpl",)
@@ -198,8 +243,9 @@ def serveProfile():
 	format is a dictionary with the keys user_name, user_bio and images
 	user_name and user_bio hold strings that hold the user's username and bio respectively
 	images holds a dicitonary where the name of each image is the key and the value is the number (integer) of likes recieve
+	count is a number contianing the number of followers
 	"""
-	retVal ={"user_name" : '',"user_bio": '', "images": {}}
+	retVal ={"user_name" : '',"user_bio": '', "images": {}, "count": 0}
 
 	retVal["user_name"] = "eggie"
 	retVal["user_bio"] = "I like tofu and MS Paint"
@@ -209,31 +255,56 @@ def serveProfile():
 
 @app.get("/Profile.css")
 def serveProfileCSS():
-	return static_file("Profile.css", root="frontend/src/components/profile", mimetype="text/css")
+	return static_file("Profile.css", root=testing + "frontend/src/components/profile", mimetype="text/css")
+
+@app.post("/follow")
+def serveFollow():
+	
+	message = request.body.read()
+	data = json.loads(message)
+
+	#data has the name of the person to be follower
+	#add the current user to the follow list and return the new nubmer of followers
+	#this should probs remove the user if they are already in there?
+
+	retVal = 100
+
+
+	return json.dumps(retVal)
+
 
 @app.get("/directmessages")
 @view("dms/DirectMessages.tpl")
 def serveDMS():
-	retVal = {"followers": [], "messager" : "", "messages": []}
+	retVal = {"followers": [], "messager" : "", "messages": [], "user" : ""}
 	"""
 	format: 
-	followers is a list of everyone you follow
+	followers is a list of lists 
+		element 0 is a person you follow
+		element 1 is whether or not that person has unread messages (True is no new, False means new)
 	messsager is the person you are currentlly messaging
 	messagers is a list of lists containing all messges sent to that person
 	list format:
 	 the first element is the senders
 	 the second element is the message
-	"""
 
+	 user is the user who is currently logged in, it is a string
+
+	 ***set the top person's messages as read ***
+	"""
+	retVal["followers"] = [["tofu", True], ["eggbert", False]]
+	retVal["messager"] = "tofu"
+	retVal["messages"] = [["tofu", "my favorite fruit is avacode"], ["eggie", "I dont think thats a fruit"]]
+	retVal["user"] = "eggie"
 	return retVal
 
 @app.get("/DirectMessages.css")
 def serveDMSCSS():
-	return static_file("DirectMessages.css", root="frontend/src/components/dms", mimetype="text/css")
+	return static_file("DirectMessages.css", root=testing + "frontend/src/components/dms", mimetype="text/css")
 
 @app.get("/newpost")
 def serveNewPost():
-	return static_file("NewPost.html", root="frontend/src/components", mimetype="text/html")
+	return static_file("NewPost.html", root=testing + "frontend/src/components", mimetype="text/html")
 
 @app.get("/seemore/<post_id>")
 @view("SeeMore.tpl")
@@ -256,9 +327,31 @@ def serveMore(post_id):
 
 @app.get("/MSPaintRLogo.png")
 def serveLogo():
-	return static_file("MSPaintRLogo.png", root="frontend/src/components/profile/profileimages", mimetype="image/png")
+	return static_file("MSPaintRLogo.png", root=testing + "frontend/src/components/profile/profileimages", mimetype="image/png")
 
+@app.post("/messageSwitch")
+def serveMessageSwitch():
+	req = request.body.read()
 
+	"""
+	req holds the name of the follower we are switching too
+
+	format of return: a dictionary holding a list or lists
+	there is one key in the dictionrary: "messages"
+
+	the value of messages is a list of lists
+	each lists is formated as:
+	list[0] = sender of the messge
+	list[1] = message
+
+	*** make sure to set this persons' messages as read***
+	"""
+
+	retVal = {"messages" : []}
+
+	retVal["messages"] = [["eggie", "yo"], ["eggbert", "yo"]]
+
+	return json.dumps(retVal)
 
 
 server = WSGIServer(("0.0.0.0", 8000), app, handler_class=WebSocketHandler)

@@ -115,9 +115,11 @@ socketMessage = new WebSocket("ws://" + window.location.host + "/message")
 function messageSend(){
 	msg = document.getElementById("textbox").value
 
-	reciever = document.getElementById("messager").value
+	reciever = document.getElementById("messager").textContent
 
 	info = {"messagee" : reciever, "message" : msg, "type" : "message"}
+
+	console.log(info)
 
 	socketMessage.send(JSON.stringify(info))
 }
@@ -127,6 +129,67 @@ socketMessage.onmessage = function(evt){
 	if(response["type"] != "message"){
 		return false;
 	}
+	console.log("eklflfjasd")
 
-	//need some way of determining user
+	active = document.getElementById("messager").textContent
+	user = document.getElementById("user").textContent
+
+	curr = ""
+	friend = ""
+
+	if(response["messagee"] == user.value){
+		curr = response["messagee"]
+		friend =response["messager"]
+	}else{
+		curr = response["messager"]
+		friend = response["messagee"]
+	}
+
+	if(friend != active){
+		user.className = "unread"
+	}else{
+		li = document.createElement("LI")
+		li.innerHTML = response["messager"] +": " + response["message"]
+		document.getElementById("messagesList").appendChild(li)
+	}
+
+
+}
+
+function follow(){
+	user = document.getElementById("username").textContent
+	console.log(user)
+	var request = new XMLHttpRequest();
+	request.onreadystatechange = function(){
+		if(this.readyState == 4 && this.status == 200){
+			console.log(this.response)
+			document.getElementById("followbutton").innerHTML = JSON.parse(this.response) + "🐑"
+		}
+	}
+	request.open("POST", "/follow")
+	request.send(JSON.stringify(user));
+}
+
+
+function messageSwitch(follower){
+	var request = new XMLHttpRequest();
+	request.onreadystatechange = function(){
+		if(this.readyState == 4 && this.status == 200){
+			console.log(this.response)
+			resp = JSON.parse(this.response)
+			document.getElementById("messager").innerHTML = follower
+			mlist = document.getElementById("messagesList")
+			mlist.innerHTML = ""
+
+			for(message of resp["messages"]){
+				console.log(message)
+				li = document.createElement("LI")
+				li.innerHTML = message[0] + ": " + message[1]
+				mlist.appendChild(li)
+			}
+
+		}
+	}
+	request.open("POST", "/messageSwitch")
+	request.send(JSON.stringify(follower));
 }

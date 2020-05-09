@@ -13,17 +13,20 @@
 </div>
 
 <br>
-<h1 align="center"> My DM's 🖌️</h1>
-
+<h1 align="center"> {{user}}'s DM's 🖌️</h1>
+<p id="user" style="display: none;">{{user}}</p>
 <div class="chatbox" >
     <div class="sidebar" id="sidebar">
-        <input id="searchmessages" type="text" placeholder="  Search Messages...">
         <div class ="messagesdisplay" >
             
             <ul id="messages">
                 <br>
                 %for follower in followers:
-                <li onclick="messageSwitch({{follower}});"> 🎨 {{follower}}</li>
+                    %if follower[1]:
+                        <li id="{{follower[0]}}" class="read"><button onclick="messageSwitch('{{follower[0]}}'); return false;" class="DMer-Button">🎨 {{follower[0]}}</button></li>
+                    %else:
+                        <li id="{{follower[0]}}" class="unread"><button onclick="messageSwitch('{{follower[0]}}'); return false;" class="DMer-Button">🎨 {{follower[0]}}</button></li>
+                    %end
                 %end
             </ul>
 

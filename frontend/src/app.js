@@ -117,11 +117,15 @@ function messageSend(){
 
 	reciever = document.getElementById("messager").textContent
 
-	info = {"messagee" : reciever, "message" : msg, "type" : "message"}
+	info = {"messagee" : reciever, "message" : msg, "type" : "message", "open": false}
 
 	console.log(info)
 
 	socketMessage.send(JSON.stringify(info))
+}
+
+socketMessage.onopen = function(evt){
+	socket.send(JSON.stringify({"type" : "message", "open": true}))
 }
 
 socketMessage.onmessage = function(evt){

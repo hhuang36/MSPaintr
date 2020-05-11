@@ -17,14 +17,14 @@
             👩‍🎨
     </div>
     <div class="Credentials">
-        <form>
+            <form action="/login-confirm" method="post">
             <label>
                 Username:
                 <input
                         id="username"
                         type="text"
                         name="user"
-                        placeholder="Enter username..."
+                        placeholder=" Enter username..."
                 />
             </label>
 
@@ -34,18 +34,13 @@
                         id="password"
                         type="password"
                         name="passwd"
-                        placeholder="Enter password..."
+                        placeholder=" Enter password..."
                 />
             </label>
-        </form>
-    </div>
 
-    <div class="Login-Button">
-        <a class="active" href="/">
-            Login
-        </a>
+            <button type="submit" onclick="loginUser()"> Login </button>
+            </form>
     </div>
-
     <br>
 
     <div class="Register-Link">
@@ -56,6 +51,5 @@
 </div>
 
 </div>
-
 </body>
 </html>

@@ -3,6 +3,7 @@
 <head>
 	<link rel="stylesheet" type="text/css" href="Regristration.css"/>
 	<title>Registration</title>
+    <script src=app.js"></script>
 </head>
 <body>
 	<img src="MSPaintRLogo.png" class="Profile-Logo"/>
@@ -10,20 +11,22 @@
       <h1 class="Registration-Heading1">Registration</h1>
       <br/>
       <br/>
-      <form enctype="multipart/form-data" id="Form">
+        <form action="/register-process" method="post">
         <label>
           User Name:
-          <input type ="text" id="user_name" />
+          <input type ="text" id="user_name" name="username" maxlength="19"/>
         </label>
         <br/>
         <br/>
         <label>
           Password:
-          <input type="text" id="password"/>
+          <input type="password" id="pass_word" name="password" maxlength="24"/><br>
+            Must be at least 8 characters<br>
+            Must include at least one number and one uppercase letter
         </label>
         <br/>
         <br/>
-        <input type ="submit" value="Register"/>
-      </form>
+        <input type ="submit" value="Register" onclick="registerUser()"/>
+        </form>
     </div>
 </body>

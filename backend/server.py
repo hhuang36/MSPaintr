@@ -11,6 +11,7 @@ import mysql.connector
 import bcrypt
 import random
 import hashlib
+import html
 
 app = Bottle()
 
@@ -32,7 +33,7 @@ mycursor.execute("CREATE TABLE IF NOT EXISTS Posts (postid VARCHAR(255), image V
 mycursor.execute("CREATE TABLE IF NOT EXISTS Comments(commentid INT, comment VARCHAR(255), Posts_postid VARCHAR(255),"
 				 "Users_username VARCHAR(20))")
 #creates follower lists
-mycursor.execute("CREATE TABLE IF NOT EXISTS Followers(username VARCHAR(20), follower VARCHAR(20), is_read NUMBER(1) DEFAULT 1)")
+mycursor.execute("CREATE TABLE IF NOT EXISTS Followers(username VARCHAR(20), follower VARCHAR(20), is_read TINYINT(1) DEFAULT 1)")
 #creates messge lists
 mycursor.execute("CREATE TABLE IF NOT EXISTS DirectMessages(sender VARCHAR(20), sendee VARCHAR(20), msg VARCHAR(255), msg_id INT)")
 
@@ -292,9 +293,9 @@ def serveMessage():
 						messy contains 2 other keys, "messagee" who is the person to recieve the message
 						and "message" which is the message itself
 						"""
-
+                        escaped = html.escape(messy["message"])
 						#add message to database
-						mycursor.excecute("INSERT INTO DirectMessages(sender, sendee, msg,  msg_id) VALUES(%s, %s, %s, SELECT COUNT(*) from msg; + 1)", (name, messy["messagee"], messy["message"]))
+						mycursor.excecute("INSERT INTO DirectMessages(sender, sendee, msg,  msg_id) VALUES(%s, %s, %s, SELECT COUNT(*) FROM DirectMessages)", (name, messy["messagee"], escaped))
 						mydb.commit()
 						#sendee now has unread message
 						mycursor.execute("UPDATE Followers SET is_read = 1 WHERE username = %s AND following = %s", (messy["messagee"], name))
@@ -303,7 +304,7 @@ def serveMessage():
 						mycursor.execute("UPDATE Followers SET is_read = 0 WHERE following = %s AND username = %s", (messy["messagee"], name))
 						mydb.commit()
 
-						retVal = {"messagee" : messy["messagee"], "messager": name, "message": messy["message"], "type": "message"}
+						retVal = {"messagee" : messy["messagee"], "messager": name, "message": escaped, "type": "message"}
 						#if this doesnt work just message me i have another idea
 						if messy["messagee"] is in user_log.keys():
 							for client in user_log[messy["messagee"]]:
@@ -400,10 +401,10 @@ def serveFollow():
 
 
 			if followed is None:
-				mycursor.execute('INSERT INTO Users(username, following) VALUES(%s, %s)', (user, data))
+				mycursor.execute('INSERT INTO Followers(username, following) VALUES(%s, %s)', (user, data))
 				mydb.commit()
-
-				mycursor.execute('UPDATE Users SET followers= followers + 1 WHERE username = %s',(data))
+                #this attempts to set the users followers to 1 more than they were previously
+				mycursor.execute('UPDATE Users SET followers=followers + 1 WHERE username = %s',(data))
 				mydb.commit()
 
 				mycursor.execute('SELECT followers FROM Users WHERE username=%s', (data))
@@ -445,20 +446,21 @@ def serveDMS():
 
 		follower = mycursor.fetchone()
 		while follower is not None:
-			retVal["followers"].append([follower[1]: follower[2]])
+			retVal["followers"].append([follower[1], follower[2]])
 			follower = mycursor.fetchone()
+        if len(retVal["followers"]) != 0:
+    		appointed = retVal["followers"][0][0]
 
-		appointed = retVal["followers"][0][0]
+    		mycursor.execute("SELECT * FROM DirectMessages WHERE (sender=%s AND sendee=%s) OR (sender=%s AND sendee=%s) ORDER BY msg_id ASC", (username, appointed, appointed, username))
+    		messages = mycursor.fetchone()
+    		while messages is not None:
+    			retVal["messages"].append([messages[0], messages[2]])
+    			messages = mycursor.fetchone()
 
-		mycursor.execute("SELECT * FROM DirectMessages WHERE (sender=%s AND sendee=%s) OR (sender=%s AND sendee=%s) ORDER BY msg_id ASC", (username, appointed, appointed, username))
-		messages = mycursor.fetchone()
-		while messages is not None:
-			retVal["messages"].append([messages[0], messages[2]])
-			messages = mycursor.fetchone()
-
-		mycursor.execute("UPDATE Followers SET is_read = 1 WHERE username=%s and following=%s", (username, appointed))
-		retVal["followers"][0][1] = 1
-		retVal["messager"] = appointed
+    		mycursor.execute("UPDATE Followers SET is_read = 1 WHERE username=%s and following=%s", (username, appointed))
+            mydb.commit()
+    		retVal["followers"][0][1] = 1
+    		retVal["messager"] = appointed
 		retVal["user"] = username
 		return retVal
 

@@ -348,7 +348,7 @@ def serveRegisterCSS():
 	return static_file("Regristration.css", root=testing + "frontend/src/components/register", mimetype="text/css")
 
 @app.get("/profile")
-@view("profile/Profile.tpl",)
+@view("profile/Profile.tpl")
 def serveProfile():
     checkToken = bottle.request.get_cookie('token')
     username = getUsername(checkToken)
@@ -374,6 +374,36 @@ def serveProfile():
         else:                                           # WE CAN EDIT THIS LATER
             retVal["user_bio"] = "Random bio"
             retVal["images"] = {"testimage.png": 7, "testimage2.png": 80, "eggie.png": 999}
+
+        return retVal
+
+@app.get("/p/<user_name>")
+@view("profile/Profile.tpl")
+def serveProfileGeneral():
+    checkToken = bottle.request.get_cookie('token')
+    username = getUsername(checkToken)
+    if username is None:
+        redirect('/login')
+    else:
+        retVal = {"user_name": '', "user_bio": '', "images": {}}
+        retVal["user_name"] = user_name
+        selectUserInfo = "SELECT * FROM Users where username = %s"
+        mycursor.execute(selectUserInfo, (user_name,))
+        userInfo = mycursor.fetchone()
+        if userInfo is not None:
+            retVal["user_bio"] = userInfo[2]
+            images = {}
+            getImages = "SELECT * FROM Posts where Users_username = %s"
+            mycursor.execute(getImages, (user_name,))
+            getImageRow = mycursor.fetchone()
+            while getImageRow is not None:
+                upvotes = getImageRow[2]
+                images.update({"../" + getImageRow[1]: upvotes})
+                getImageRow = mycursor.fetchone()
+            retVal["images"] = images
+        else:                                           # WE CAN EDIT THIS LATER
+            retVal["user_bio"] = "Random bio"
+            retVal["images"] = {"../testimage.png": 7, "../testimage2.png": 80, "../eggie.png": 999}
 
         return retVal
 

@@ -364,10 +364,10 @@ def serveMessage():
                         elif name is not None:
                             user_log[name].add(wsock)
 
-            """
-            messy contains 2 other keys, "messagee" who is the person to recieve the message
-            and "message" which is the message itself
-            """
+                    """
+                    messy contains 2 other keys, "messagee" who is the person to recieve the message
+                    and "message" which is the message itself
+                    """
                     escaped = html.escape(messy["message"])
                     #add message to database
                     mycursor.excecute("INSERT INTO DirectMessages(sender, sendee, msg,  msg_id) VALUES(%s, %s, %s, SELECT COUNT(*) FROM DirectMessages)", (name, messy["messagee"], escaped))

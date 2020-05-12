@@ -58,26 +58,26 @@ def serve_home():
     checkToken = bottle.request.get_cookie('token')
     _username = getUsername(checkToken)
     if _username is None:
-    redirect('/login')
+        redirect('/login')
     else:
-    username = _username
-    print(username)
-    retVal = {"posts": []}
-    mycursor.execute('SELECT * FROM Posts')
-    row = mycursor.fetchone()
-    posts = []
-    while row is not None:
-    postDetails = {"user_name": row[3], "post_image": row[1], "post_id": row[0], "likes": row[2]}
-    posts.append(postDetails)
-    row = mycursor.fetchone()
-    retVal["posts"] = posts
-    return retVal
+        username = _username
+        print(username)
+        retVal = {"posts": []}
+        mycursor.execute('SELECT * FROM Posts')
+        row = mycursor.fetchone()
+        posts = []
+        while row is not None:
+            postDetails = {"user_name": row[3], "post_image": row[1], "post_id": row[0], "likes": row[2]}
+            posts.append(postDetails)
+            row = mycursor.fetchone()
+        retVal["posts"] = posts
+        return retVal
 
 @app.route('/home')
 def getFeed():
     checkToken = bottle.request.get_cookie('token')
     if getUsername(checkToken) is None:
-    redirect('/login')
+        redirect('/login')
     redirect('/')
 
 @app.route("/updoot")
@@ -85,32 +85,32 @@ def serveUpdoot():
     checkToken = bottle.request.get_cookie('token')
     tokenuser = getUsername(checkToken)
     if tokenuser is None:
-    redirect('/login')
-    wsock = request.environ.get('wsgi.websocket')
-    while True:
-    try:
-    message = wsock.receive()
+        redirect('/login')
+        wsock = request.environ.get('wsgi.websocket')
+        while True:
+            try:
+                message = wsock.receive()
 
-    if not (message == None):
+                if not (message == None):
 
-    messy = json.loads(message)
-            if messy["type"] == 'updoot':
-                post_id = messy["message"]
-                # message is the name of the image
-                # update the image and reutrn a json object
-                # format:
-                # "imageName" : <imagename>
-                # "updoots" : <newupodots>
-                upvotes = getUpvotes(post_id, tokenuser)
-                query = "UPDATE Posts SET upvotes = %s WHERE postid = %s"
-                data = (upvotes, post_id)
-                mycursor.execute(query, data)
-                mydb.commit()
+                    messy = json.loads(message)
+                    if messy["type"] == 'updoot':
+                        post_id = messy["message"]
+                        # message is the name of the image
+                        # update the image and reutrn a json object
+                        # format:
+                        # "imageName" : <imagename>
+                        # "updoots" : <newupodots>
+                        upvotes = getUpvotes(post_id, tokenuser)
+                        query = "UPDATE Posts SET upvotes = %s WHERE postid = %s"
+                        data = (upvotes, post_id)
+                        mycursor.execute(query, data)
+                        mydb.commit()
 
                 resp = {"type": "updoot", "imageName": post_id, "updoots": upvotes}
 
                 for client in server.clients.values():
-                 client.ws.send(json.dumps(resp))
+                    client.ws.send(json.dumps(resp))
 
         except WebSocketError:
             break
@@ -661,7 +661,7 @@ def serveNewPost():
 def serveMore(post_id):
     checkToken = bottle.request.get_cookie('token')
     if getUsername(checkToken) is None:
-       redirect('/login')
+        redirect('/login')
     """
     format: a dictionary with 4 keys user_name, post_image, comments, and likes
     user_name is a stirng containing the user who posted the image
@@ -692,7 +692,7 @@ def serveMessageSwitch():
     checkToken = bottle.request.get_cookie('token')
     username = getUsername(checkToken)
     if username is None:
-       redirect('/login')
+        redirect('/login')
     else:
     """
     req holds the name of the follower we are switching too
@@ -728,11 +728,11 @@ def saltAndHash(password):
 
 def checkCriteria(password):
     if len(password) < 8:
-       return "Password must be at least 8 characters."
+        return "Password must be at least 8 characters."
     if password.islower():
-       return "Password must contain an uppercase character."
+        return "Password must contain an uppercase character."
     if not any(char.isdigit() for char in password):
-       return "Password must contain a number."
+        return "Password must contain a number."
     return "valid"
 
 
@@ -743,8 +743,8 @@ def generateToken():
     token = ""
     i = 0
     while (i < 16):
-    token += chars[random.randint(0, 51)]
-    i += 1
+        token += chars[random.randint(0, 51)]
+        i += 1
     return str(token)
 
 def getUsername(token):

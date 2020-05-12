@@ -348,48 +348,48 @@ def serveMessage():
         try:
             message = wsock.receive()
 
-        if not(message == None):
+            if not(message == None):
 
-            messy = json.loads(message)
+                messy = json.loads(message)
 
             #message in messy is the message
             #massagee in messy is who the message is sent too
 
-            if messy["type"] == "message":
-                name = getUsername(bottle.request.get_cookie("token"))
+                if messy["type"] == "message":
+                    name = getUsername(bottle.request.get_cookie("token"))
         #when a connection is upp
-                if messy["open"]:
-                    if name is not None and name not in user_log.keys():
-                        user_log[name] = {wsock}
-                    elif name is not None:
-                        user_log[name].add(wsock)
+                    if messy["open"]:
+                        if name is not None and name not in user_log.keys():
+                            user_log[name] = {wsock}
+                        elif name is not None:
+                            user_log[name].add(wsock)
 
             """
             messy contains 2 other keys, "messagee" who is the person to recieve the message
             and "message" which is the message itself
             """
-                escaped = html.escape(messy["message"])
-                #add message to database
-                mycursor.excecute("INSERT INTO DirectMessages(sender, sendee, msg,  msg_id) VALUES(%s, %s, %s, SELECT COUNT(*) FROM DirectMessages)", (name, messy["messagee"], escaped))
-                mydb.commit()
-                #sendee now has unread message
-                mycursor.execute("UPDATE Followers SET is_read = 1 WHERE username = %s AND following = %s", (messy["messagee"], name))
-                mydb.commit()
-                #sender user has read messages
-                mycursor.execute("UPDATE Followers SET is_read = 0 WHERE following = %s AND username = %s", (messy["messagee"], name))
-                mydb.commit()
+                    escaped = html.escape(messy["message"])
+                    #add message to database
+                    mycursor.excecute("INSERT INTO DirectMessages(sender, sendee, msg,  msg_id) VALUES(%s, %s, %s, SELECT COUNT(*) FROM DirectMessages)", (name, messy["messagee"], escaped))
+                    mydb.commit()
+                    #sendee now has unread message
+                    mycursor.execute("UPDATE Followers SET is_read = 1 WHERE username = %s AND following = %s", (messy["messagee"], name))
+                    mydb.commit()
+                    #sender user has read messages
+                    mycursor.execute("UPDATE Followers SET is_read = 0 WHERE following = %s AND username = %s", (messy["messagee"], name))
+                    mydb.commit()
 
-                retVal = {"messagee" : messy["messagee"], "messager": name, "message": escaped, "type": "message"}
-                #if this doesnt work just message me i have another idea
-                if messy["messagee"] is in user_log.keys():
-                    for client in user_log[messy["messagee"]]:
-                        try:
-                            client.send(json.dumps(retVal))
-                        except:
-                            continue
+                    retVal = {"messagee" : messy["messagee"], "messager": name, "message": escaped, "type": "message"}
+                    #if this doesnt work just message me i have another idea
+                    if messy["messagee"] is in user_log.keys():
+                        for client in user_log[messy["messagee"]]:
+                            try:
+                                client.send(json.dumps(retVal))
+                            except:
+                                continue
 
-                wsock.send(json.dumps(retVal))
-
+                    wsock.send(json.dumps(retVal))
+    
         except WebSocketError:
             break
 

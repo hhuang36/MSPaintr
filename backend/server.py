@@ -112,8 +112,8 @@ def serveUpdoot():
                 for client in server.clients.values():
                     client.ws.send(json.dumps(resp))
 
-        except WebSocketError:
-            break
+            except WebSocketError:
+                break
 
 
 @app.route('/home')
@@ -653,7 +653,7 @@ def serveDMSCSS():
 def serveNewPost():
     checkToken = bottle.request.get_cookie('token')
     if getUsername(checkToken) is None:
-       redirect('/login')
+        redirect('/login')
     return static_file("NewPost.html", root="frontend/src/components", mimetype="text/html")
 
 @app.get("/seemore/<post_id>")

@@ -9,7 +9,7 @@
   <div class="LeftAlign">
         <a href="/home">MSPaintr</a>
         <br />
-                <a href="/login">Sign in</a>
+                <a href="/logout">Sign out</a>
           <br />
                 <a href="/profile">Profile</a>
           <br />

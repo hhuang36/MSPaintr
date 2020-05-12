@@ -26,8 +26,13 @@ socketComment.onmessage = function(evt){
 
 	comms = document.getElementById("comments")
 	prep = document.createElement("P")
+	var followButton = document.createElement("Button")
+	followButton.innerHTML = "Follow"
+	prep.appendChild(followButton)
 	prep.appendChild(document.createTextNode(response["message"]))
 	comms.appendChild(prep)
+	document.getElementById('comment').value = ""
+
 }
 
 function sendComment(imagename) {
@@ -44,7 +49,6 @@ function sendUpdoot(img_name){
 
 	socket.send(JSON.stringify(resp))
 }
-	
 
 socketPost = new WebSocket("ws://" + window.location.host + "/post")
 

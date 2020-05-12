@@ -572,27 +572,24 @@ def serveFollow():
     retVal = -1
     token = bottle.request.get_cookie("token")
     if token is not None:
-    user = getUsername(token)
+        user = getUsername(token)
     if user is not None:
-    #sees if the person is currently following
-    mycursor.execute('SELECT * FROM Followers WHERE username=%s AND following=%s', (user, data))
-    followed = mycursor.fetchone()
+        #sees if the person is currently following
+        mycursor.execute('SELECT * FROM Followers WHERE username=%s AND following=%s', (user, data))
+        followed = mycursor.fetchone()
 
 
-    if followed is None:
-    mycursor.execute('INSERT INTO Followers(username, following) VALUES(%s, %s)', (user, data))
-    mydb.commit()
-    #this attempts to set the users followers to 1 more than they were previously
-    mycursor.execute('UPDATE Users SET followers=followers + 1 WHERE username = %s',(data))
-    mydb.commit()
+        if followed is None:
+            mycursor.execute('INSERT INTO Followers(username, following) VALUES(%s, %s)', (user, data))
+            mydb.commit()
+        #this attempts to set the users followers to 1 more than they were previously
+            mycursor.execute('UPDATE Users SET followers=followers + 1 WHERE username = %s',(data,))
+            mydb.commit()
+        else:
+            mycursor.execute('UPDATE Users SET followers= followers - 1 WHERE username = %s',(data,))
+            mydb.commit()
 
-    mycursor.execute('SELECT followers FROM Users WHERE username=%s', (data))
-    retVal = mycursor.fetchone()
-    else:
-    mycursor.execute('UPDATE Users SET followers= followers - 1 WHERE username = %s',(data))
-    mydb.commit()
-
-    mycursor.execute('SELECT followers FROM Users WHERE username=%s', (data))
+    mycursor.execute('SELECT followers FROM Users WHERE username=%s', (data,))
     retVal = mycursor.fetchone()
     return json.dumps(retVal)
 
@@ -603,45 +600,45 @@ def serveDMS():
     checkToken = bottle.request.get_cookie('token')
     username = getUsername(checkToken)
     if username is None:
-       redirect('/login')
+        redirect('/login')
     else:
-    retVal = {"followers": [], "messager" : "", "messages": [], "user" : ""}
-    """
-    format: 
-    followers is a list of lists 
-    element 0 is a person you follow
-    element 1 is whether or not that person has unread messages (True is no new, False means new)
-    messsager is the person you are currentlly messaging
-    messagers is a list of lists containing all messges sent to that person
-    list format:
-     the first element is the senders
-     the second element is the message
+        retVal = {"followers": [], "messager" : "", "messages": [], "user" : ""}
+        """
+        format: 
+        followers is a list of lists 
+        element 0 is a person you follow
+        element 1 is whether or not that person has unread messages (True is no new, False means new)
+        messsager is the person you are currentlly messaging
+        messagers is a list of lists containing all messges sent to that person
+        list format:
+         the first element is the senders
+         the second element is the message
 
-     user is the user who is currently logged in, it is a string
+         user is the user who is currently logged in, it is a string
 
-     ***set the top person's messages as read ***
-    """
-    mycursor.execute("SELECT * FROM Followers WHERE username=%s", (username))
+         ***set the top person's messages as read ***
+        """
+        mycursor.execute("SELECT * FROM Followers WHERE username=%s", (username))
 
-    follower = mycursor.fetchone()
-    while follower is not None:
-    retVal["followers"].append([follower[1], follower[2]])
-    follower = mycursor.fetchone()
-    if len(retVal["followers"]) != 0:
-    appointed = retVal["followers"][0][0]
+        follower = mycursor.fetchone()
+        while follower is not None:
+            retVal["followers"].append([follower[1], follower[2]])
+            follower = mycursor.fetchone()
+        if len(retVal["followers"]) != 0:
+            appointed = retVal["followers"][0][0]
 
-    mycursor.execute("SELECT * FROM DirectMessages WHERE (sender=%s AND sendee=%s) OR (sender=%s AND sendee=%s) ORDER BY msg_id ASC", (username, appointed, appointed, username))
-    messages = mycursor.fetchone()
-    while messages is not None:
-    retVal["messages"].append([messages[0], messages[2]])
-    messages = mycursor.fetchone()
+            mycursor.execute("SELECT * FROM DirectMessages WHERE (sender=%s AND sendee=%s) OR (sender=%s AND sendee=%s) ORDER BY msg_id ASC", (username, appointed, appointed, username))
+            messages = mycursor.fetchone()
+            while messages is not None:
+                retVal["messages"].append([messages[0], messages[2]])
+                messages = mycursor.fetchone()
 
-    mycursor.execute("UPDATE Followers SET is_read = 1 WHERE username=%s and following=%s", (username, appointed))
-    mydb.commit()
-    retVal["followers"][0][1] = 1
-    retVal["messager"] = appointed
-    retVal["user"] = username
-    return retVal
+            mycursor.execute("UPDATE Followers SET is_read = 1 WHERE username=%s and following=%s", (username, appointed))
+            mydb.commit()
+            retVal["followers"][0][1] = 1
+        retVal["messager"] = appointed
+        retVal["user"] = username
+        return retVal
 
 @app.get("/DirectMessages.css")
 def serveDMSCSS():

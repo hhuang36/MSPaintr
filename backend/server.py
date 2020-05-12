@@ -314,32 +314,32 @@ def servePost():
     else:  # ADDED
         wsock = request.environ.get('wsgi.websocket')
         while True:
-        try:
-            message = wsock.receive()
+            try:
+                message = wsock.receive()
 
-            if not (message == None):
-                getSize = "SELECT * FROM Posts"  # ADDED
-                mycursor.execute(getSize)  # ADDED
-                allPosts = mycursor.fetchall()
-                num = 0  # ADDED
-                if allPosts is not None:
-                    for p in allPosts:
-                    num += 1
+                if not (message == None):
+                    getSize = "SELECT * FROM Posts"  # ADDED
+                    mycursor.execute(getSize)  # ADDED
+                    allPosts = mycursor.fetchall()
+                    num = 0  # ADDED
+                    if allPosts is not None:
+                        for p in allPosts:
+                            num += 1
 
-                    print(num)  # ADDED
-                    imgname = "image" + str(num) + ".png"  # ADDED
-                    file = open("frontend/src/components/testimages/" + imgname, 'wb')  # CHANGED
-                    file.write(message)
+                        print(num)  # ADDED
+                        imgname = "image" + str(num) + ".png"  # ADDED
+                        file = open("frontend/src/components/testimages/" + imgname, 'wb')  # CHANGED
+                        file.write(message)
                     retVal = {"type": "image", "imagename": imgname, "username": username}  # CHANGED
                     insertPost = ("INSERT INTO Posts (postid, image, upvotes, Users_username) "  # ADDED
-                      "VALUES (%s, %s, %s, %s)")  # ADDED
+                          "VALUES (%s, %s, %s, %s)")  # ADDED
                     values = (imgname, imgname, "0", username)  # ADDED
                     mycursor.execute(insertPost, values)  # ADDED
                     mydb.commit()  # ADDED
-                for client in server.clients.values():
-                   client.ws.send(json.dumps(retVal))
-        except WebSocketError:
-           break
+                    for client in server.clients.values():
+                        client.ws.send(json.dumps(retVal))
+            except WebSocketError:
+                break
 
 @app.route("/message")
 def serveMessage():

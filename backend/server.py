@@ -401,7 +401,7 @@ def serveRegisterCSS():
 
 
 @app.get("/p/<user_name>")
-@view("profile/Profile.tpl")
+@view("profile/ProfileGen.tpl")
 def serveProfileGeneral(user_name):
     checkToken = bottle.request.get_cookie('token')
     username = getUsername(checkToken)
@@ -422,12 +422,12 @@ def serveProfileGeneral(user_name):
             getImageRow = mycursor.fetchone()
             while getImageRow is not None:
                 upvotes = getImageRow[2]
-                images.update({"../" + getImageRow[1]: upvotes})
+                images.update({getImageRow[1]: upvotes})
                 getImageRow = mycursor.fetchone()
             retVal["images"] = images
         else:       # WE CAN EDIT THIS LATER
             retVal["user_bio"] = "Random bio"
-            retVal["images"] = {"../testimage.png": 7, "../testimage2.png": 80, "../eggie.png": 999}
+            retVal["images"] = {"testimage.png": 7, "testimage2.png": 80, "eggie.png": 999}
         return retVal
     
 

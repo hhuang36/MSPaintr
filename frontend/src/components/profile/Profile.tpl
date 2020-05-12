@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<link rel="stylesheet" type="text/css" href="Profile.css"/>
-  <script src="app.js"></script>
+	<link rel="stylesheet" type="text/css" href="/Profile.css"/>
+  <script src="/app.js"></script>
 	<title>Profile</title>
 </head>
 <body>
@@ -23,7 +23,7 @@
 	<img src="MSPaintRLogo.png" class="Profile-Logo"/>
 	<div class="Profile">
       <div class="Profile-Side">
-          <p id="username">{{user_name}}<p/>
+          <p id="username">{{user_name}}</p>
           
           <button class="Profile-Button">💌</button>
           <span>&nbsp;</span>

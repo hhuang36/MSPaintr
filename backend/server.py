@@ -283,8 +283,8 @@ def serveComment():
                     allComms = mycursor.fetchall()
                     id = 0
                     if allComms != None:
-                    for com in allComms:
-                    id += 1
+                        for com in allComms:
+                            id += 1
 
                     comment_stmt = (
                     "INSERT INTO Comments (commentid, comment, Posts_postid, Users_username) "
@@ -299,9 +299,9 @@ def serveComment():
                     resp = {"type": "comment", "message": msg, "image": post_id}
 
                     for client in server.clients.values():
-                       client.ws.send(json.dumps(resp))
+                        client.ws.send(json.dumps(resp))
         except WebSocketError:
-           break
+            break
 
 
 

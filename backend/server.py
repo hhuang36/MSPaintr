@@ -345,15 +345,22 @@ def serveMessage():
                     """
                     escaped = html.escape(messy["message"])
                     #add message to database
-                    mycursor.execute("SELECT COUNT(*) FROM DirectMessages")
-                    count = mycursor.fetchone()
-                    mycursor.execute("INSERT INTO DirectMessages(sender, sendee, msg,  msg_id) VALUES(%s, %s, %s, %s)", (name, messy["messagee"], escaped, count))
+                    mycursor.execute("SELECT * FROM DirectMessages")
+                    countVal = 0
+                    count = mycursor.fetchall()
+                    if count is not None:
+                        for c in count:
+                            countVal +=1
+                    insertDMs = ("INSERT INTO DirectMessages (sender, sendee, msg,  msg_id) VALUES (%s, %s, %s, %s)")
+                    messagee = messy["messagee"]
+                    vals = (name, messagee, escaped, str(countVal))
+                    mycursor.execute(insertDMs, vals)
                     mydb.commit()
                     #sendee now has unread message
-                    mycursor.execute("UPDATE Followers SET is_read = 1 WHERE username = %s AND following = %s", (messy["messagee"], name))
+                    mycursor.execute("UPDATE Followers SET is_read = 1 WHERE username = %s AND follower = %s", (messy["messagee"], name))
                     mydb.commit()
                     #sender user has read messages
-                    mycursor.execute("UPDATE Followers SET is_read = 0 WHERE following = %s AND username = %s", (messy["messagee"], name))
+                    mycursor.execute("UPDATE Followers SET is_read = 0 WHERE follower = %s AND username = %s", (messy["messagee"], name))
                     mydb.commit()
 
                     retVal = {"messagee" : messy["messagee"], "messager": name, "message": escaped, "type": "message"}
@@ -575,7 +582,7 @@ def serveDMS():
                 retVal["messages"].append([messages[0], messages[2]])
                 messages = mycursor.fetchone()
 
-            mycursor.execute("UPDATE Followers SET is_read = 1 WHERE username=%s and following=%s", (username, appointed))
+            mycursor.execute("UPDATE Followers SET is_read = 1 WHERE username=%s and follower=%s", (username, appointed))
             mydb.commit()
             retVal["followers"][0][1] = 1
             retVal["messager"] = appointed
@@ -652,7 +659,7 @@ def serveMessageSwitch():
             retVal["messages"].append([messages[0], messages[2]])
             messages = mycursor.fetchone()
 
-        mycursor.execute("UPDATE Followers SET is_read = 1 WHERE username=%s and following=%s", (username, req))
+        mycursor.execute("UPDATE Followers SET is_read = 1 WHERE username=%s and follower=%s", (username, req))
     
 
     return json.dumps(retVal)

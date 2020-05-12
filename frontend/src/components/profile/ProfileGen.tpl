@@ -20,7 +20,7 @@
           <input type ="text" id="search" />
         <input type ="submit" value="Search"/>
     </div>
-	<img src="MSPaintRLogo.png" class="Profile-Logo"/>
+	<img src="../MSPaintRLogo.png" class="Profile-Logo"/>
 	<div class="Profile">
       <div class="Profile-Side">
           <p id="username">{{user_name}}</p>

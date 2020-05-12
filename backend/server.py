@@ -26,7 +26,7 @@ mydb = mysql.connector.connect(host="mysqldb",
        )
 mycursor = mydb.cursor()
 mycursor.execute("CREATE TABLE IF NOT EXISTS Tokens(usern VARCHAR(255), token VARCHAR(255))")
-mycursor.execute("CREATE TABLE IF NOT EXISTS Users(username VARCHAR(20) NOT NULL, password VARCHAR(45), "
+mycursor.execute("CREATE TABLE IF NOT EXISTS Users(username VARCHAR(20) NOT NULL, password VARCHAR(255), "
      "bio VARCHAR(255), followers INT)")
 mycursor.execute("CREATE TABLE IF NOT EXISTS Posts (postid VARCHAR(255), image VARCHAR(255), upvotes INT, "
      "Users_username VARCHAR (20))")
@@ -223,31 +223,6 @@ def processRegister():
     else:
         return checkCriteria(str(password))
 
-@app.post("/register-process")
-def processRegister():
-    username = request.forms["username"]
-    password = request.forms["password"]
-    # # this is where you should check if password meets criteria
-    # # if it does hash the pw and store it in the database
-    select = "SELECT * FROM Users WHERE username= %s"
-    mycursor.execute(select, (username,))
-    row = mycursor.fetchone()
-    if row is not None:
-       return "Username already in use."
-
-    if checkCriteria(str(password)) == "valid":
-        hashedpw = saltAndHash(password)
-        hashedpw = str(hashedpw.decode('utf-8'))
-        reg_stmt = (
-        "INSERT INTO Users (username, password, bio, followers) "
-        "VALUES (%s, %s, %s, %s)"
-        )
-        reg_val = (username, hashedpw, "This is the default bio.", "0")
-        mycursor.execute(reg_stmt, reg_val)
-        mydb.commit()
-        redirect('/login')
-    else:
-       return checkCriteria(str(password))
 
 @app.route("/comment")
 def serveComment():
@@ -370,7 +345,9 @@ def serveMessage():
                     """
                     escaped = html.escape(messy["message"])
                     #add message to database
-                    mycursor.excecute("INSERT INTO DirectMessages(sender, sendee, msg,  msg_id) VALUES(%s, %s, %s, SELECT COUNT(*) FROM DirectMessages)", (name, messy["messagee"], escaped))
+                    mycursor.execute("SELECT COUNT(*) FROM DirectMessages")
+                    count = mycursor.fetchone()
+                    mycursor.execute("INSERT INTO DirectMessages(sender, sendee, msg,  msg_id) VALUES(%s, %s, %s, %s)", (name, messy["messagee"], escaped, count))
                     mydb.commit()
                     #sendee now has unread message
                     mycursor.execute("UPDATE Followers SET is_read = 1 WHERE username = %s AND following = %s", (messy["messagee"], name))
@@ -381,7 +358,7 @@ def serveMessage():
 
                     retVal = {"messagee" : messy["messagee"], "messager": name, "message": escaped, "type": "message"}
                     #if this doesnt work just message me i have another idea
-                    if messy["messagee"] is in user_log.keys():
+                    if messy["messagee"] in user_log.keys():
                         for client in user_log[messy["messagee"]]:
                             try:
                                 client.send(json.dumps(retVal))
@@ -422,59 +399,23 @@ def serveRegister():
 def serveRegisterCSS():
     return static_file("Regristration.css", root=testing + "frontend/src/components/register", mimetype="text/css")
 
-@app.get("/profile")
-@view("profile/Profile.tpl")
-def serveProfile():
-    checkToken = bottle.request.get_cookie('token')
-    username = getUsername(checkToken)  # ADDED
-    if username is None:  # CHANGED
-        redirect('/login')
-    else:  # ADDED
-        wsock = request.environ.get('wsgi.websocket')
-        while True:
-            try:
-                message = wsock.receive()
-
-                if not (message == None):
-                    getSize = "SELECT * FROM Posts"  # ADDED
-                    mycursor.execute(getSize)  # ADDED
-                    allPosts = mycursor.fetchall()
-                    num = 0  # ADDED
-                    if allPosts is not None:
-                        for p in allPosts:
-                            num += 1
-
-                    print(num)  # ADDED
-                    imgname = "image" + str(num) + ".png"  # ADDED
-                    file = open("frontend/src/components/testimages/" + imgname, 'wb')  # CHANGED
-                    file.write(message)
-                    retVal = {"type": "image", "imagename": imgname, "username": username}  # CHANGED
-                    insertPost = ("INSERT INTO Posts (postid, image, upvotes, Users_username) "  # ADDED
-                                  "VALUES (%s, %s, %s, %s)")  # ADDED
-                    values = (imgname, imgname, "0", username)  # ADDED
-                    mycursor.execute(insertPost, values)  # ADDED
-                    mydb.commit()  # ADDED
-                    for client in server.clients.values():
-                        client.ws.send(json.dumps(retVal))
-            except WebSocketError:
-                break
-
 
 @app.get("/p/<user_name>")
 @view("profile/Profile.tpl")
-def serveProfileGeneral():
+def serveProfileGeneral(user_name):
     checkToken = bottle.request.get_cookie('token')
     username = getUsername(checkToken)
     if username is None:
      redirect('/login')
     else:
-        retVal = {"user_name": '', "user_bio": '', "images": {}}
+        retVal = {"user_name": '', "user_bio": '', "images": {}, "count": 0}
         retVal["user_name"] = user_name
         selectUserInfo = "SELECT * FROM Users where username = %s"
         mycursor.execute(selectUserInfo, (user_name,))
-       userInfo = mycursor.fetchone()
+        userInfo = mycursor.fetchone()
         if userInfo is not None:
             retVal["user_bio"] = userInfo[2]
+            retVal["count"] = userInfo[3]
             images = {}
             getImages = "SELECT * FROM Posts where Users_username = %s"
             mycursor.execute(getImages, (user_name,))
@@ -483,7 +424,7 @@ def serveProfileGeneral():
                 upvotes = getImageRow[2]
                 images.update({"../" + getImageRow[1]: upvotes})
                 getImageRow = mycursor.fetchone()
-                retVal["images"] = images
+            retVal["images"] = images
         else:       # WE CAN EDIT THIS LATER
             retVal["user_bio"] = "Random bio"
             retVal["images"] = {"../testimage.png": 7, "../testimage2.png": 80, "../eggie.png": 999}
@@ -533,13 +474,14 @@ def serveProfile():
     if username is None:
         redirect('/login')
     else:
-        retVal = {"user_name": '', "user_bio": '', "images": {}}
+        retVal = {"user_name": '', "user_bio": '', "images": {}, "count": 0}
         retVal["user_name"] = username
         selectUserInfo = "SELECT * FROM Users where username = %s"
         mycursor.execute(selectUserInfo, (username,))
         userInfo = mycursor.fetchone()
         if userInfo is not None:
             retVal["user_bio"] = userInfo[2]
+            retVal["count"] = userInfo[3]
             images = {}
             getImages = "SELECT * FROM Posts where Users_username = %s"
             mycursor.execute(getImages, (username,))
@@ -575,12 +517,12 @@ def serveFollow():
         user = getUsername(token)
     if user is not None:
         #sees if the person is currently following
-        mycursor.execute('SELECT * FROM Followers WHERE username=%s AND following=%s', (user, data))
+        mycursor.execute('SELECT * FROM Followers WHERE username=%s AND follower=%s', (user, data))
         followed = mycursor.fetchone()
 
 
         if followed is None:
-            mycursor.execute('INSERT INTO Followers(username, following) VALUES(%s, %s)', (user, data))
+            mycursor.execute('INSERT INTO Followers(username, follower) VALUES(%s, %s)', (user, data))
             mydb.commit()
         #this attempts to set the users followers to 1 more than they were previously
             mycursor.execute('UPDATE Users SET followers=followers + 1 WHERE username = %s',(data,))
@@ -618,7 +560,7 @@ def serveDMS():
 
          ***set the top person's messages as read ***
         """
-        mycursor.execute("SELECT * FROM Followers WHERE username=%s", (username))
+        mycursor.execute("SELECT * FROM Followers WHERE username=%s", (username,))
 
         follower = mycursor.fetchone()
         while follower is not None:
@@ -636,7 +578,7 @@ def serveDMS():
             mycursor.execute("UPDATE Followers SET is_read = 1 WHERE username=%s and following=%s", (username, appointed))
             mydb.commit()
             retVal["followers"][0][1] = 1
-        retVal["messager"] = appointed
+            retVal["messager"] = appointed
         retVal["user"] = username
         return retVal
 
@@ -689,19 +631,19 @@ def serveMessageSwitch():
     if username is None:
         redirect('/login')
     else:
-    """
-    req holds the name of the follower we are switching too
+        """
+        req holds the name of the follower we are switching too
 
-    format of return: a dictionary holding a list or lists
-    there is one key in the dictionrary: "messages"
+        format of return: a dictionary holding a list or lists
+        there is one key in the dictionrary: "messages"
 
-    the value of messages is a list of lists
-    each lists is formated as:
-    list[0] = sender of the messge
-    list[1] = message
+        the value of messages is a list of lists
+        each lists is formated as:
+        list[0] = sender of the messge
+        list[1] = message
 
-    *** make sure to set this persons' messages as read***
-    """
+        *** make sure to set this persons' messages as read***
+        """
         retVal = {"messages" : []}
 
         mycursor.execute("SELECT * FROM DirectMessages WHERE (sender=%s AND sendee=%s) OR (sender=%s AND sendee=%s) ORDER BY msg_id ASC", (username, req, req, username))

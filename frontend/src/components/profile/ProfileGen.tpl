@@ -39,7 +39,7 @@
             <br/>
             <button  class="Profile-Button" onclick="sendUpdoot('{{image}}');"><span id="count{{image}}">{{images[image]}}</span>⭐</button>
             <br>
-            <a href= seemore/{{image}}>See More</a>
+            <a href= ../seemore/{{image}}>See More</a>
           </div>
         % end
         </div>

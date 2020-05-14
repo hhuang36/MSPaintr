@@ -282,6 +282,7 @@ def servePost():
 
 @app.route("/message")
 def serveMessage():
+    global user_log
     wsock = request.environ.get('wsgi.websocket')
     while True:
         try:

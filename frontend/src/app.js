@@ -26,10 +26,13 @@ socketComment.onmessage = function(evt){
 
 	comms = document.getElementById("comments")
 	prep = document.createElement("P")
-	var followButton = document.createElement("Button")
-	followButton.innerHTML = "Follow"
-	prep.appendChild(followButton)
-	prep.appendChild(document.createTextNode(response["message"]))
+	var profileLink = document.createElement("A")
+	var username = response["message"].slice(0,response["message"].indexOf(":"))
+	var commentMess = response["message"].slice(response["message"].indexOf(":"), response["message"].length)
+	profileLink.innerHTML = username
+	profileLink.href = "/p/" + username
+	prep.appendChild(profileLink)
+	prep.appendChild(document.createTextNode(commentMess))
 	comms.appendChild(prep)
 	document.getElementById('comment').value = ""
 
@@ -80,14 +83,17 @@ socketPost.onmessage = function(evt){
 	outer.className = "Post"
 
 	para = document.createElement("P")
-	para.innerHTML = "POSTED BY: " + user
+	var profileLink = document.createElement("A")
+	profileLink.innerHTML = user
+	profileLink.href = "/p/" + user
+	para.appendChild(document.createTextNode("POSTED BY: "))
 
 	image = document.createElement("IMG")
 
 	image.src = "/image/" + img
 	image.className = "Post-Image"
 	image.id = img
-	image.alt = "Cannot Veiw Image"
+	image.alt = "Cannot View Image"
 
 	button = document.createElement("BUTTON")
 	button.className = "Profile-Button"
@@ -105,6 +111,7 @@ socketPost.onmessage = function(evt){
 	seemore.innerHTML = "See More"
 
 	outer.appendChild(para)
+	outer.appendChild(profileLink)
 	outer.appendChild(image)
 	outer.appendChild(document.createElement("BR"))
 	outer.appendChild(button)

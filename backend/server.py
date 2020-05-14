@@ -24,7 +24,7 @@ mydb = mysql.connector.connect(host="mysqldb",
        passwd="changeme",
        database="mspaintrdb"
        )
-mycursor = mydb.cursor()
+mycursor = mydb.cursor(prepared=True)
 mycursor.execute("CREATE TABLE IF NOT EXISTS Tokens(usern VARCHAR(255), token VARCHAR(255))")
 mycursor.execute("CREATE TABLE IF NOT EXISTS Users(username VARCHAR(20) NOT NULL, password VARCHAR(255), "
      "bio VARCHAR(255), followers INT)")
@@ -79,42 +79,6 @@ def getFeed():
     if getUsername(checkToken) is None:
         redirect('/login')
     redirect('/')
-
-@app.route("/updoot")
-def serveUpdoot():
-    checkToken = bottle.request.get_cookie('token')
-    tokenuser = getUsername(checkToken)
-    if tokenuser is None:
-        redirect('/login')
-        wsock = request.environ.get('wsgi.websocket')
-        while True:
-            try:
-                message = wsock.receive()
-
-                if not (message == None):
-
-                    messy = json.loads(message)
-                    if messy["type"] == 'updoot':
-                        post_id = messy["message"]
-                        # message is the name of the image
-                        # update the image and reutrn a json object
-                        # format:
-                        # "imageName" : <imagename>
-                        # "updoots" : <newupodots>
-                        upvotes = getUpvotes(post_id, tokenuser)
-                        query = "UPDATE Posts SET upvotes = %s WHERE postid = %s"
-                        data = (upvotes, post_id)
-                        mycursor.execute(query, data)
-                        mydb.commit()
-
-                resp = {"type": "updoot", "imageName": post_id, "updoots": upvotes}
-
-                for client in server.clients.values():
-                    client.ws.send(json.dumps(resp))
-
-            except WebSocketError:
-                break
-
 
 @app.route('/home')
 def getFeed():

@@ -506,6 +506,8 @@ def serveFollow():
             mycursor.execute('UPDATE Users SET followers=followers + 1 WHERE username = %s',(data,))
             mydb.commit()
         else:
+            mycursor.execute('DELETE FROM Followers WHERE username = %s AND follower = %s', (user, data))
+            mydb.commit()
             mycursor.execute('UPDATE Users SET followers= followers - 1 WHERE username = %s',(data,))
             mydb.commit()
 

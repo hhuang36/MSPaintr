@@ -26,8 +26,8 @@
 		% for post in posts:
 			<div class="Post">
 			
-				<p>POSTED BY: {{post["user_name"]}}</p>
-				<img class="Post-Image" id={{post["post_id"]}} src="/image/{{post['post_image']}}" alt="Cannot Veiw Image"/>
+				<p>POSTED BY: <span><a href= "/p/{{post["user_name"]}}">{{post["user_name"]}}</a></span></p>
+				<img class="Post-Image" id={{post["post_id"]}} src="/image/{{post['post_image']}}" alt="Cannot View Image"/>
 	     		 <br/>
 			  	<button  class="Profile-Button" onclick="sendUpdoot('{{post["post_image"]}}');"><span id="count{{post["post_image"]}}">{{post["likes"]}}</span>⭐</button>
 			  	<br>

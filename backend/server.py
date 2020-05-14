@@ -1,5 +1,5 @@
 # Source: Bottle
-
+user_log = {}
 
 from bottle import get, route, redirect, run, Bottle, static_file, view, post, request
 import bottle
@@ -17,7 +17,7 @@ app = Bottle()
 
 #keeps track of usernames and their respective client for the server
 
-user_log = {}
+
 
 mydb = mysql.connector.connect(host="mysqldb",
        user="default",
@@ -283,6 +283,7 @@ def servePost():
 @app.route("/message")
 def serveMessage():
     global user_log
+    print( user_log)
     wsock = request.environ.get('wsgi.websocket')
     while True:
         try:
@@ -300,6 +301,7 @@ def serveMessage():
         #when a connection is upp
                     if messy["open"]:
                         if name is not None and name not in user_log.keys():
+                            print("here")
                             user_log[name] = {wsock}
                         elif name is not None:
                             user_log[name].add(wsock)

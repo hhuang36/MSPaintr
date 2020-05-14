@@ -288,6 +288,15 @@ def serveMessage():
     while True:
         try:
             message = wsock.receive()
+            name = getUsername(bottle.request.get_cookie("token"))
+        #when a connection is upp
+            print("here")
+            if name is not None and name not in user_log.keys():
+                print("here")
+                user_log[name] = {wsock}
+            elif name is not None:
+                user_log[name].add(wsock)
+
 
             if not(message == None):
 
@@ -297,16 +306,7 @@ def serveMessage():
             #massagee in messy is who the message is sent too
 
                 if messy["type"] == "message":
-                    name = getUsername(bottle.request.get_cookie("token"))
-        #when a connection is upp
-                    if messy["open"] == "true":
-                        print("here")
-                        if name is not None and name not in user_log.keys():
-                            print("here")
-                            user_log[name] = {wsock}
-                        elif name is not None:
-                            user_log[name].add(wsock)
-
+                    
                     """
                     messy contains 2 other keys, "messagee" who is the person to recieve the message
                     and "message" which is the message itself

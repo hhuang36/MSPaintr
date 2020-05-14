@@ -365,13 +365,16 @@ def serveMessage():
 
                     retVal = {"messagee" : messy["messagee"], "messager": name, "message": escaped, "type": "message"}
                     #if this doesnt work just message me i have another idea
+                    print(user_log)
                     if messy["messagee"] in user_log.keys():
                         for client in user_log[messy["messagee"]]:
                             try:
                                 client.send(json.dumps(retVal))
+                                print("sent")
                             except:
                                 continue
-
+                                print("failed")
+                    print("if no other messge not sent")
                     wsock.send(json.dumps(retVal))
     
         except WebSocketError:

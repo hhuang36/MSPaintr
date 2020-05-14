@@ -154,7 +154,7 @@ socketMessage.onmessage = function(evt){
 	}
 
 	if(friend != active){
-		user.className = "unread"
+		document.getElementById(friend).className = "unread"
 	}else{
 		li = document.createElement("LI")
 		li.innerHTML = response["messager"] +": " + response["message"]

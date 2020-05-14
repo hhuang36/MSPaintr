@@ -299,7 +299,8 @@ def serveMessage():
                 if messy["type"] == "message":
                     name = getUsername(bottle.request.get_cookie("token"))
         #when a connection is upp
-                    if messy["open"]:
+                    if messy["open"] == "true":
+                        print("here")
                         if name is not None and name not in user_log.keys():
                             print("here")
                             user_log[name] = {wsock}

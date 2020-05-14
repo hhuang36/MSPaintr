@@ -128,7 +128,7 @@ function messageSend(){
 
 	reciever = document.getElementById("messager").textContent
 
-	info = {"messagee" : reciever, "message" : msg, "type" : "message", "open": false}
+	info = {"messagee" : reciever, "message" : msg, "type" : "message", "open": "false"}
 
 	console.log(info)
 
@@ -136,7 +136,8 @@ function messageSend(){
 }
 
 socketMessage.onopen = function(evt){
-	socket.send(JSON.stringify({"type" : "message", "open": true}))
+	console.log("hello from messaging socket")
+	socket.send(JSON.stringify({"type" : "message", "open": "true"}))
 }
 
 socketMessage.onmessage = function(evt){

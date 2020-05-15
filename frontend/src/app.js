@@ -56,6 +56,7 @@ function sendUpdoot(img_name){
 socketPost = new WebSocket("ws://" + window.location.host + "/post")
 
 function submitPost(){
+	console.log(document.getElementById("name").value)
 	file = document.getElementById("name").files[0]
 	reader = new FileReader();
 	data = new ArrayBuffer();

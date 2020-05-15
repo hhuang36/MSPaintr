@@ -18,7 +18,6 @@
 <div class="chatbox" >
     <div class="sidebar" id="sidebar">
         <div class ="messagesdisplay" >
-            
             <ul id="messages">
                 <br>
                 %for follower in followers:
@@ -32,7 +31,7 @@
 
         </div>
     </div>
-    <div class="chat" id="chat" style="overflow-y: scroll; height: 545px">
+    <div class="chat" id="chat" style="overflow-y: scroll; height: 545px" >
         <p id="messager" style="display: none;">{{messager}}</p>
         <ul class="messagesList" id = "messagesList">
             %for message in messages:

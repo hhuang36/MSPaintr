@@ -128,9 +128,13 @@ function messageSend(){
 
 	reciever = document.getElementById("messager").textContent
 
+	document.getElementById()
+
 	info = {"messagee" : reciever, "message" : msg, "type" : "message", "open": "false"}
 
-	console.log(info)
+	li = document.createElement("LI")
+	li.innerHTML = document.getElementById("user").textContent +": " + msg
+	document.getElementById("messagesList").appendChild(li)
 
 	socketMessage.send(JSON.stringify(info))
 }
@@ -154,10 +158,10 @@ socketMessage.onmessage = function(evt){
 	friend = ""
 	console.log(response)
 
-	if(response["messagee"] == user.value){
+	if(response["messagee"] == user){
 		curr = response["messagee"]
 		friend =response["messager"]
-	}else{
+	}else if(response["messager"] == user){
 		curr = response["messager"]
 		friend = response["messagee"]
 	}

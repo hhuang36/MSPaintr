@@ -289,13 +289,6 @@ def serveMessage():
         try:
             message = wsock.receive()
             name = getUsername(bottle.request.get_cookie("token"))
-        #when a connection is upp
-            print("here")
-            if name is not None and name not in user_log.keys():
-                print("here")
-                user_log[name] = wsock
-            elif name is not None:
-                user_log[name] = wsock
 
 
             if not(message == None):
@@ -331,14 +324,9 @@ def serveMessage():
                     mycursor.execute("UPDATE Followers SET is_read = 0 WHERE follower = %s AND username = %s", (messy["messagee"], name))
                     mydb.commit()
 
-                    retVal = {"messagee" : messy["messagee"], "messager": name, "message": escaped, "type": "message"}
+                    retVal = {"messagee" : messy["messagee"], "messager": name, "type": "message"}
                     #if this doesnt work just message me i have another idea
-                    print(user_log)
-                    print("----------------------")
-                    print(retVal)
-                    print(user)
-                    print(messy)
-                    print("----------------------")
+                    
                     if messy["messagee"] in user_log.keys():
                         try:
                             user_log[messy["messagee"]].send(json.dumps(retVal))

@@ -56,7 +56,13 @@ function sendUpdoot(img_name){
 socketPost = new WebSocket("ws://" + window.location.host + "/post")
 
 function submitPost(){
-	console.log(document.getElementById("name").value)
+	filename = document.getElementById("name").value
+	fileExtension = filename.slice(filename.length-4, filename.length)
+	if(fileExtension != ".png" && fileExtension != ".PNG"){
+		alert("Image must be a png!")
+		document.getElementById("name").value = ""
+		return
+	}
 	file = document.getElementById("name").files[0]
 	reader = new FileReader();
 	data = new ArrayBuffer();

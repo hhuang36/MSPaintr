@@ -26,7 +26,7 @@
 
                         <li id="{{follower[0]}}" class="read"><button onclick="messageSwitch('{{follower[0]}}'); return false;" class="DMer-Button">🎨 {{follower[0]}}</button></li>
                     %else:
-                    <li><a href="/directmessages">🎨 {{follower[0]}}</a></li><li id="{{follower[0]}}" class="unread"><button onclick="messageSwitch('{{follower[0]}}'); return false;" class="DMer-Button">🎨 {{follower[0]}}</button></li>
+                    <li><a href="/directmessages/{{follower[0]}}">🎨 {{follower[0]}}</a></li><li id="{{follower[0]}}" class="unread"><button onclick="messageSwitch('{{follower[0]}}'); return false;" class="DMer-Button">🎨 {{follower[0]}}</button></li>
                     %end
                 %end
             </ul>

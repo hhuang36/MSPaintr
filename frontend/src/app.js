@@ -97,7 +97,6 @@ socketPost.onmessage = function(evt){
 
 	button = document.createElement("BUTTON")
 	button.className = "Profile-Button"
-	button.onclick = sendUpdoot(img)
 
 	spann = document.createElement("SPAN")
 	spann.id = img 

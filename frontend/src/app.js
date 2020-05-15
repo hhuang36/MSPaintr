@@ -133,8 +133,12 @@ function messageSend(){
 	msg = document.getElementById("textbox").value
 
 	reciever = document.getElementById("messager").textContent
+	var dmsUrl = window.location.pathname
+	console.log(dmsUrl)
+	var receiver = dmsUrl.substring(16, dmsUrl.length)
+	console.log(receiver)
 
-	info = {"messagee" : reciever, "message" : msg, "type" : "message"}
+	info = {"messagee" : receiver, "message" : msg, "type" : "message"}
 
 	li = document.createElement("LI")
 	li.innerHTML = document.getElementById("user").textContent +": " + msg
@@ -158,8 +162,8 @@ socketMessage.onmessage = function(evt){
 	console.log(response)
 
 	if(response["messagee"] == user){
-		document.getElementById("messager").style.color = "blueviolet"
-		alert("new message from " + response["messager"] + ".\nPlease select their name to veiw.")
+		//document.getElementById("messager").style.color = "blueviolet"
+		alert("new message from " + response["messager"] + ".\nPlease check their dms.")
 	}
 
 }

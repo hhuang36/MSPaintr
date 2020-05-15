@@ -2,7 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <title> Messages </title>
-    <link rel="stylesheet" type="text/css" href="DirectMessages.css"/>
+    <link rel="stylesheet" type="text/css" href="/DirectMessages.css"/>
     <script type="text/javascript" src=/app.js></script>
 </head>
 
@@ -21,15 +21,11 @@
             <ul id="messages">
                 <br>
                 %for follower in followers:
-                    %if follower[1]:
-			<li><a href="/directmessages">🎨 {{follower[0]}}</a></li>
+                    <!---%if follower[1]:-->
+			<li><a href="/directmessages/{{follower[0]}}">🎨 {{follower[0]}}</a></li>
 
                         <li id="{{follower[0]}}" class="read"><button onclick="messageSwitch('{{follower[0]}}'); return false;" class="DMer-Button">🎨 {{follower[0]}}</button></li>
-                    %else:
-			<li><a href="/directmessages">🎨 {{follower[0]}}</a></li>
-
-                        <li id="{{follower[0]}}" class="unread"><button onclick="messageSwitch('{{follower[0]}}'); return false;" class="DMer-Button">🎨 {{follower[0]}}</button></li>
-                    %end
+                    <!--else:<li><a href="/directmessages">🎨 {{follower[0]}}</a></li><li id="{{follower[0]}}" class="unread"><button onclick="messageSwitch('{{follower[0]}}'); return false;" class="DMer-Button">🎨 {{follower[0]}}</button></li>end-->
                 %end
             </ul>
 

@@ -7,7 +7,7 @@
 </head>
 <body>
 	<div class="LeftAlign">
-		<p id="messager" style="display: none;">{{messager}}</p>
+		<p id="user" style="display: none;">{{messager}}</p>
         <a href="/home">MSPaintr</a>
         <br />
                 <a href="/logout">Sign out</a>

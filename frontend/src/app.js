@@ -153,7 +153,7 @@ socketMessage.onmessage = function(evt){
 	}
 	console.log("eklflfjasd")
 
-	active = document.getElementById("messager").textContent
+	user = document.getElementById("user").textContent
 
 	console.log(response)
 

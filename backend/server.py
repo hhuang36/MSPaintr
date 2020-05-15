@@ -544,6 +544,7 @@ def serveDMS():
             retVal["followers"][0][1] = 1
             retVal["messager"] = appointed
         retVal["user"] = username
+        print("dm load", retVal)
         return retVal
 
 @app.get("/DirectMessages.css")
@@ -610,7 +611,7 @@ def serveMessageSwitch():
         *** make sure to set this persons' messages as read***
         """
         retVal = {"messages" : []}
-
+        print("Dm switch", req)
         mycursor.execute("SELECT * FROM DirectMessages WHERE (sender=%s AND sendee=%s) OR (sender=%s AND sendee=%s) ORDER BY msg_id ASC", (username, req, req, username))
         messages = mycursor.fetchone()
         while messages is not None:
@@ -618,7 +619,7 @@ def serveMessageSwitch():
             messages = mycursor.fetchone()
 
         mycursor.execute("UPDATE Followers SET is_read = 1 WHERE username=%s and follower=%s", (username, req))
-    
+        print("dm switch", retVal)
 
     return json.dumps(retVal)
 

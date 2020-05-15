@@ -27,7 +27,7 @@
     %image = post_image.replace("../image/", "")
 		<img class="Post-Image" id={{image}} src={{post_image}} alt="cannot veiw image"/>
  		 <br/>
-        <form onsubmit="sendComment('{{image}}');"> 
+        <form onsubmit="sendComment('{{image}}'); return false;"> 
           <input type ="text" id="comment" />
           <input type ="submit" value="Add Comment"/>
         </form>
@@ -36,7 +36,7 @@
 	  	<br>
       <div id="comments">
   	  	% for comment in comments:
-          <p>{{comment["user"]}}:{{comment["comment_body"]}}</p>
+          <p><a href="/p/{{comment['user']}}">{{comment["user"]}}</a>:{{comment["comment_body"]}}</p>
         % end
       </div>
 	</div>

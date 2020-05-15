@@ -41,7 +41,7 @@
             %end
         </ul>
         <input id="textbox" type="text" placeholder="  Enter message...">
-        <button onclick="messageSend();return false;">Send</button>
+        <button onclick="messageSend();">Send</button>
     </div>
 </div>
 <!--

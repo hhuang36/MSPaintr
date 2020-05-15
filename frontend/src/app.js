@@ -128,8 +128,6 @@ function messageSend(){
 
 	reciever = document.getElementById("messager").textContent
 
-	document.getElementById()
-
 	info = {"messagee" : reciever, "message" : msg, "type" : "message"}
 
 	li = document.createElement("LI")

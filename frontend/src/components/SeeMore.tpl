@@ -22,7 +22,7 @@
   </div>
 	<img src="../MSPaintRLogo.png" class="Profile-Logo"/>
 	<div class="Post">
-		<p>POSTED BY: <span>{{user_name}}</span></p>
+		<p>POSTED BY: <span><a href= "/p/{{user_name}}">{{user_name}}</a></span></p>
     %image = post_image.replace("../image/", "")
 		<img class="Post-Image" id={{image}} src={{post_image}} alt="cannot veiw image"/>
  		 <br/>

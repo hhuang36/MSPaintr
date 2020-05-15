@@ -172,6 +172,10 @@ def processRegister():
     row = mycursor.fetchone()
     if row is not None:
         return "Username already in use."
+    if len(username) < 5:
+        return "Username is too short."
+    if len(username) > 20:
+        return "Username is too long."
 
     if checkCriteria(str(password)) == "valid":
         hashedpw = saltAndHash(password)
@@ -645,6 +649,8 @@ def saltAndHash(password):
 def checkCriteria(password):
     if len(password) < 8:
         return "Password must be at least 8 characters."
+    if len(password) > 255:
+        return "Password has too many characters."
     if password.islower():
         return "Password must contain an uppercase character."
     if not any(char.isdigit() for char in password):

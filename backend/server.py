@@ -293,9 +293,9 @@ def serveMessage():
             print("here")
             if name is not None and name not in user_log.keys():
                 print("here")
-                user_log[name] = {wsock}
+                user_log[name] = wsock
             elif name is not None:
-                user_log[name].add(wsock)
+                user_log[name] = wsock
 
 
             if not(message == None):
@@ -335,13 +335,12 @@ def serveMessage():
                     #if this doesnt work just message me i have another idea
                     print(user_log)
                     if messy["messagee"] in user_log.keys():
-                        for client in user_log[messy["messagee"]]:
-                            try:
-                                client.send(json.dumps(retVal))
-                                print("sent")
-                            except:
-                                continue
-                                print("failed")
+                        try:
+                            user_log[messy["messagee"]].send(json.dumps(retVal))
+                            print("sent")
+                        except:
+                           continue
+                                
                     print("if no other messge not sent")
                     wsock.send(json.dumps(retVal))
     
@@ -552,7 +551,7 @@ def serveDMS():
             mycursor.execute("SELECT * FROM DirectMessages WHERE (sender=%s AND sendee=%s) OR (sender=%s AND sendee=%s) ORDER BY msg_id ASC", (username, appointed, appointed, username))
             messages = mycursor.fetchone()
             while messages is not None:
-                retVal["messages"].append([messages[0], messages[2]])
+                retVal["messages"].append([messages[1], messages[2]])
                 messages = mycursor.fetchone()
 
             mycursor.execute("UPDATE Followers SET is_read = 1 WHERE username=%s and follower=%s", (username, appointed))

@@ -162,8 +162,12 @@ socketMessage.onmessage = function(evt){
 	console.log(response)
 
 	if(response["messagee"] == user){
-		//document.getElementById("messager").style.color = "blueviolet"
 		alert("new message from " + response["messager"] + ".\nPlease check their dms.")
+		x = document.getElementById("messager")
+		if (x != null){
+			x.style.color = "red"
+		}
+
 	}
 
 }

@@ -320,8 +320,8 @@ def serveMessage():
                     mycursor.execute(insertDMs, vals)
                     mydb.commit()
                     #sendee now has unread message
-                    #mycursor.execute("UPDATE Followers SET is_read = 0 WHERE username = %s AND follower = %s", (messy["messagee"], name))
-                    #mydb.commit()
+                    mycursor.execute("UPDATE Followers SET is_read = 0 WHERE username = %s AND follower = %s", (messy["messagee"], name))
+                    mydb.commit()
 
                     retVal = {"messagee" : messy["messagee"], "messager": name, "type": "message"}
                     #if this doesnt work just message me i have another idea
@@ -586,9 +586,9 @@ def serveDMS(receiver):
                 retVal["messages"].append([messages[0], messages[2]])
                 messages = mycursor.fetchone()
             print(retVal["messages"])
-            #mycursor.execute("UPDATE Followers SET is_read = 1 WHERE username=%s and follower=%s", (username, appointed))
-            #mydb.commit()
-            #retVal["followers"][0][1] = 1
+            mycursor.execute("UPDATE Followers SET is_read = 1 WHERE username=%s and follower=%s", (username, appointed))
+            mydb.commit()
+            retVal["followers"][0][1] = 1
             retVal["messager"] = appointed
         retVal["user"] = username
         print("dm load", retVal)

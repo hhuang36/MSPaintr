@@ -27,7 +27,7 @@
     %image = post_image.replace("../image/", "")
 		<img class="Post-Image" id={{image}} src={{post_image}} alt="cannot veiw image"/>
  		 <br/>
-        <form onsubmit="sendComment('{{image}}'); return false;"> 
+        <form onsubmit="sendComment('{{image}}');"> 
           <input type ="text" id="comment" />
           <input type ="submit" value="Add Comment"/>
         </form>

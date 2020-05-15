@@ -139,7 +139,9 @@ function messageSend(){
 	li = document.createElement("LI")
 	li.innerHTML = document.getElementById("user").textContent +": " + msg
 	document.getElementById("messagesList").appendChild(li)
-
+	console.log("info------")
+	console.log(info)
+	console.log("info end-----")
 	socketMessage.send(JSON.stringify(info))
 }
 

@@ -130,7 +130,7 @@ function messageSend(){
 
 	document.getElementById()
 
-	info = {"messagee" : reciever, "message" : msg, "type" : "message", "open": "false"}
+	info = {"messagee" : reciever, "message" : msg, "type" : "message"}
 
 	li = document.createElement("LI")
 	li.innerHTML = document.getElementById("user").textContent +": " + msg
@@ -139,10 +139,6 @@ function messageSend(){
 	socketMessage.send(JSON.stringify(info))
 }
 
-socketMessage.onopen = function(evt){
-	console.log("hello from messaging socket")
-	socket.send(JSON.stringify({"type" : "message", "open": "true"}))
-}
 
 socketMessage.onmessage = function(evt){
 	response = JSON.parse(evt.data)
@@ -154,26 +150,12 @@ socketMessage.onmessage = function(evt){
 	active = document.getElementById("messager").textContent
 	user = document.getElementById("user").textContent
 
-	curr = ""
-	friend = ""
 	console.log(response)
 
 	if(response["messagee"] == user){
-		curr = response["messagee"]
-		friend =response["messager"]
-	}else if(response["messager"] == user){
-		curr = response["messager"]
-		friend = response["messagee"]
+		document.getElementById(response["messager"]).style.color = "blueviolet"
+		alert("new message from " + response["messager"] + ".\nPlease select their name to veiw.")
 	}
-	console.log(curr + " " + friend)
-	if(friend != active){
-		document.getElementById(friend).className = "unread"
-	}else{
-		li = document.createElement("LI")
-		li.innerHTML = response["messager"] +": " + response["message"]
-		document.getElementById("messagesList").appendChild(li)
-	}
-
 
 }
 

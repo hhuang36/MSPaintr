@@ -1,5 +1,4 @@
 # Source: Bottle
-user_log = {}
 
 from bottle import get, route, redirect, run, Bottle, static_file, view, post, request
 import bottle
@@ -290,13 +289,7 @@ def serveMessage():
             message = wsock.receive()
             name = getUsername(bottle.request.get_cookie("token"))
         #when a connection is upp
-            print("here")
-            if name is not None and name not in user_log.keys():
-                print("here")
-                user_log[name] = wsock
-            elif name is not None:
-                user_log[name] = wsock
-
+           
 
             if not(message == None):
 
@@ -325,24 +318,14 @@ def serveMessage():
                     mycursor.execute(insertDMs, vals)
                     mydb.commit()
                     #sendee now has unread message
-                    mycursor.execute("UPDATE Followers SET is_read = 1 WHERE username = %s AND follower = %s", (messy["messagee"], name))
-                    mydb.commit()
-                    #sender user has read messages
-                    mycursor.execute("UPDATE Followers SET is_read = 0 WHERE follower = %s AND username = %s", (messy["messagee"], name))
+                    mycursor.execute("UPDATE Followers SET is_read = 0 WHERE username = %s AND follower = %s", (messy["messagee"], name))
                     mydb.commit()
 
-                    retVal = {"messagee" : messy["messagee"], "messager": name, "message": escaped, "type": "message"}
+                    retVal = {"messagee" : messy["messagee"], "messager": name, "type": "message"}
                     #if this doesnt work just message me i have another idea
                     
-                    if messy["messagee"] in user_log.keys():
-                        try:
-                            user_log[messy["messagee"]].send(json.dumps(retVal))
-                            print("sent")
-                        except:
-                           continue
-                                
-                    print("if no other messge not sent")
-                    wsock.send(json.dumps(retVal))
+                    for client in server.clients.values():
+                        client.ws.send(json.dumps(retVal)) 
     
         except WebSocketError:
             break

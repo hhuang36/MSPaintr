@@ -157,7 +157,7 @@ socketMessage.onmessage = function(evt){
 	console.log(response)
 
 	if(response["messagee"] == user){
-		document.getElementById(response["messager"]).style.color = "blueviolet"
+		document.getElementById("messager").style.color = "blueviolet"
 		alert("new message from " + response["messager"] + ".\nPlease select their name to veiw.")
 	}
 

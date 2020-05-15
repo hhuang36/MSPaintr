@@ -334,6 +334,11 @@ def serveMessage():
                     retVal = {"messagee" : messy["messagee"], "messager": name, "message": escaped, "type": "message"}
                     #if this doesnt work just message me i have another idea
                     print(user_log)
+                    print("----------------------")
+                    print(retVal)
+                    print(user)
+                    print(messy)
+                    print("----------------------")
                     if messy["messagee"] in user_log.keys():
                         try:
                             user_log[messy["messagee"]].send(json.dumps(retVal))
@@ -551,9 +556,9 @@ def serveDMS():
             mycursor.execute("SELECT * FROM DirectMessages WHERE (sender=%s AND sendee=%s) OR (sender=%s AND sendee=%s) ORDER BY msg_id ASC", (username, appointed, appointed, username))
             messages = mycursor.fetchone()
             while messages is not None:
-                retVal["messages"].append([messages[1], messages[2]])
+                retVal["messages"].append([messages[0], messages[2]])
                 messages = mycursor.fetchone()
-
+            print(retVal["messages"])
             mycursor.execute("UPDATE Followers SET is_read = 1 WHERE username=%s and follower=%s", (username, appointed))
             mydb.commit()
             retVal["followers"][0][1] = 1

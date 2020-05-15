@@ -152,6 +152,7 @@ socketMessage.onmessage = function(evt){
 
 	curr = ""
 	friend = ""
+	console.log(response)
 
 	if(response["messagee"] == user.value){
 		curr = response["messagee"]
@@ -160,7 +161,7 @@ socketMessage.onmessage = function(evt){
 		curr = response["messager"]
 		friend = response["messagee"]
 	}
-
+	console.log(curr + " " + friend)
 	if(friend != active){
 		document.getElementById(friend).className = "unread"
 	}else{

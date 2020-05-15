@@ -61,7 +61,7 @@ def serve_home():
     else:
         username = _username
         print(username)
-        retVal = {"posts": []}
+        retVal = {"posts": [], "messager": _username}
         mycursor.execute('SELECT * FROM Posts')
         row = mycursor.fetchone()
         posts = []
@@ -301,7 +301,7 @@ def serveMessage():
             #massagee in messy is who the message is sent too
 
                 if messy["type"] == "message":
-                    
+                    print("recieved from  message: ", messy)
                     """
                     messy contains 2 other keys, "messagee" who is the person to recieve the message
                     and "message" which is the message itself
@@ -370,7 +370,7 @@ def serveProfileGeneral(user_name):
     if username is None:
      redirect('/login')
     else:
-        retVal = {"user_name": '', "user_bio": '', "images": {}, "count": 0}
+        retVal = {"user_name": '', "user_bio": '', "images": {}, "count": 0, "messager": username}
         retVal["user_name"] = user_name
         selectUserInfo = "SELECT * FROM Users where username = %s"
         mycursor.execute(selectUserInfo, (user_name,))
@@ -561,7 +561,8 @@ def serveNewPost():
 @view("SeeMore.tpl")
 def serveMore(post_id):
     checkToken = bottle.request.get_cookie('token')
-    if getUsername(checkToken) is None:
+    user = getUsername(checkToken)
+    if user is None:
         redirect('/login')
     """
     format: a dictionary with 4 keys user_name, post_image, comments, and likes
@@ -576,7 +577,7 @@ def serveMore(post_id):
     mycursor.execute(select, (post_id,))
     post = mycursor.fetchone()
     username = post[3]
-    retVal = {"user_name": "", "post_image": "", "comments": [], "likes": 0}
+    retVal = {"user_name": "", "post_image": "", "comments": [], "likes": 0, "messager": user}
     retVal["user_name"] = username
     retVal["likes"] = post[2]
     retVal["post_image"] = "../image/" + post_id

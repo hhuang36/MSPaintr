@@ -24,7 +24,7 @@
 	<div class="Profile">
       <div class="Profile-Side">
           <p id="username">{{user_name}}</p>
-          
+          <p id="messager" style="display: none;">{{user_name}}</p>
           <button class="Profile-Button">💌</button>
           <span>&nbsp;</span>
           <button class="Profile-Button" id="followbutton" onclick="follow(); return false;">{{count}} 🐑 </button>

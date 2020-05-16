@@ -7,6 +7,7 @@
 </head>
 <body>
 	<div className="LeftAlign">
+    <p id="user" style="display: none;">{{messager}}</p>
     <a href="/home">MSPaintr</a>
     <br/>
             <a href="/logout">Sign out</a>
@@ -22,7 +23,7 @@
   </div>
 	<img src="../MSPaintRLogo.png" class="Profile-Logo"/>
 	<div class="Post">
-		<p>POSTED BY: {{user_name}}</p>
+		<p>POSTED BY: <span><a href= "/p/{{user_name}}">{{user_name}}</a></span></p>
     %image = post_image.replace("../image/", "")
 		<img class="Post-Image" id={{image}} src={{post_image}} alt="cannot veiw image"/>
  		 <br/>
@@ -35,7 +36,7 @@
 	  	<br>
       <div id="comments">
   	  	% for comment in comments:
-          <p>{{comment["user"]}}:{{comment["comment_body"]}}</p>
+          <p><a href="/p/{{comment['user']}}">{{comment["user"]}}</a>:{{comment["comment_body"]}}</p>
         % end
       </div>
 	</div>

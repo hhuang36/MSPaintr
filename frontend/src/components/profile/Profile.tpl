@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<link rel="stylesheet" type="text/css" href="Profile.css"/>
-  <script src="app.js"></script>
+	<link rel="stylesheet" type="text/css" href="/Profile.css"/>
+  <script src="/app.js"></script>
 	<title>Profile</title>
 </head>
 <body>
@@ -23,11 +23,11 @@
 	<img src="MSPaintRLogo.png" class="Profile-Logo"/>
 	<div class="Profile">
       <div class="Profile-Side">
-          <p>{{user_name}}<p/>
-          
+          <p id="username">{{user_name}}</p>
+          <p id="user" style="display: none;">{{user_name}}</p>
           <button class="Profile-Button">💌</button>
           <span>&nbsp;</span>
-          <button class="Profile-Button"> 🐑 </button>
+          <button class="Profile-Button" id="followbutton" onclick="follow(); return false;">{{count}} 🐑 </button>
           <br/>
           <p>{{user_bio}}</p>
           <br/>

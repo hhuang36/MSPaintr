@@ -26,10 +26,13 @@ socketComment.onmessage = function(evt){
 
 	comms = document.getElementById("comments")
 	prep = document.createElement("P")
-	var followButton = document.createElement("Button")
-	followButton.innerHTML = "Follow"
-	prep.appendChild(followButton)
-	prep.appendChild(document.createTextNode(response["message"]))
+	var profileLink = document.createElement("A")
+	var username = response["message"].slice(0,response["message"].indexOf(":"))
+	var commentMess = response["message"].slice(response["message"].indexOf(":"), response["message"].length)
+	profileLink.innerHTML = username
+	profileLink.href = "/p/" + username
+	prep.appendChild(profileLink)
+	prep.appendChild(document.createTextNode(commentMess))
 	comms.appendChild(prep)
 	document.getElementById('comment').value = ""
 
@@ -53,6 +56,13 @@ function sendUpdoot(img_name){
 socketPost = new WebSocket("ws://" + window.location.host + "/post")
 
 function submitPost(){
+	filename = document.getElementById("name").value
+	fileExtension = filename.slice(filename.length-4, filename.length)
+	if(fileExtension != ".png" && fileExtension != ".PNG"){
+		alert("Image must be a png!")
+		document.getElementById("name").value = ""
+		return
+	}
 	file = document.getElementById("name").files[0]
 	reader = new FileReader();
 	data = new ArrayBuffer();
@@ -69,7 +79,7 @@ socketPost.onmessage = function(evt){
 	info = JSON.parse(evt.data)
 
 	if( info["type"] != "image"){
-		return;
+		return false;
 	}
 		
 
@@ -80,18 +90,20 @@ socketPost.onmessage = function(evt){
 	outer.className = "Post"
 
 	para = document.createElement("P")
-	para.innerHTML = "POSTED BY: " + user
+	var profileLink = document.createElement("A")
+	profileLink.innerHTML = user
+	profileLink.href = "/p/" + user
+	para.appendChild(document.createTextNode("POSTED BY: "))
 
 	image = document.createElement("IMG")
 
 	image.src = "/image/" + img
 	image.className = "Post-Image"
 	image.id = img
-	image.alt = "Cannot Veiw Image"
+	image.alt = "Cannot View Image"
 
 	button = document.createElement("BUTTON")
 	button.className = "Profile-Button"
-	button.onclick = sendUpdoot(img)
 
 	spann = document.createElement("SPAN")
 	spann.id = img 
@@ -105,6 +117,7 @@ socketPost.onmessage = function(evt){
 	seemore.innerHTML = "See More"
 
 	outer.appendChild(para)
+	outer.appendChild(profileLink)
 	outer.appendChild(image)
 	outer.appendChild(document.createElement("BR"))
 	outer.appendChild(button)
@@ -114,3 +127,85 @@ socketPost.onmessage = function(evt){
 	document.getElementById("Subs").appendChild(outer)
 }
 
+socketMessage = new WebSocket("ws://" + window.location.host + "/message")
+
+function messageSend(){
+	msg = document.getElementById("textbox").value
+
+	reciever = document.getElementById("messager").textContent
+	var dmsUrl = window.location.pathname
+	console.log(dmsUrl)
+	var receiver = dmsUrl.substring(16, dmsUrl.length)
+	console.log(receiver)
+
+	info = {"messagee" : receiver, "message" : msg, "type" : "message"}
+
+	li = document.createElement("LI")
+	li.innerHTML = document.getElementById("user").textContent +": " + msg
+	document.getElementById("messagesList").appendChild(li)
+	console.log("info------")
+	console.log(info)
+	console.log("info end-----")
+	socketMessage.send(JSON.stringify(info))
+}
+
+
+socketMessage.onmessage = function(evt){
+	response = JSON.parse(evt.data)
+	if(response["type"] != "message"){
+		return false;
+	}
+	console.log("eklflfjasd")
+
+	user = document.getElementById("user").textContent
+
+	console.log(response)
+
+	if(response["messagee"] == user){
+		alert("new message from " + response["messager"] + ".\nPlease check their dms.")
+		x = document.getElementById("messager")
+		if (x != null){
+			x.style.color = "red"
+		}
+
+	}
+
+}
+
+function follow(){
+	user = document.getElementById("username").textContent
+	console.log(user)
+	var request = new XMLHttpRequest();
+	request.onreadystatechange = function(){
+		if(this.readyState == 4 && this.status == 200){
+			console.log(this.response)
+			document.getElementById("followbutton").innerHTML = JSON.parse(this.response) + "🐑"
+		}
+	}
+	request.open("POST", "/follow")
+	request.send(JSON.stringify(user));
+}
+
+
+function messageSwitch(follower){
+	var request = new XMLHttpRequest();
+	request.onreadystatechange = function(){
+		if(this.readyState == 4 && this.status == 200){
+			console.log(this.response)
+			resp = JSON.parse(this.response)
+			document.getElementById("messager").innerHTML = follower
+			mlist = document.getElementById("messagesList")
+			mlist.innerHTML = ""
+
+			for(message of resp["messages"]){
+				console.log(message)
+				li = document.createElement("LI")
+				li.innerHTML = message[0] + ": " + message[1]
+				mlist.appendChild(li)
+			}
+
+		}
+	}
+	request.open("POST", "/messageSwitch")
+	request.send(JSON.stringify(follower));
+}

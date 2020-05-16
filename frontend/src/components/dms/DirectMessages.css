@@ -67,6 +67,20 @@ li {
   font-family: "Comic Sans MS";
 }
 
+a.unread{
+  list-style-type: circle;
+  color: red;
+  font-size: 20px;
+  font-family: "Comic Sans MS";
+}
+
+a.read{
+  list-style-type: circle;
+  color: darkcyan;
+  font-size: 20px;
+  font-family: "Comic Sans MS";
+}
+
 ul.messagesList{
   margin-top: 10px;
   border-radius: 10px;
@@ -82,4 +96,10 @@ ul {
   margin-top: 13px;
   margin-left: 8px;
   background-color: lightblue;
+}
+
+.DMer-Button{
+  padding: 0;
+  border: none;
+  background: none;
 }

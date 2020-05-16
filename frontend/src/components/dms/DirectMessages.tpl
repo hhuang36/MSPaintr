@@ -22,9 +22,9 @@
                 <br>
                 %for follower in followers:
                    %if int(follower[1]) == 1:
-                       <li><a href="/directmessages/{{follower[0]}}">🎨 {{follower[0]}}</a></li><li id="{{follower[0]}}" class="read"><button onclick="messageSwitch('{{follower[0]}}'); return false;" class="DMer-Button">🎨 {{follower[0]}}</button></li>
+                       <li><a href="/directmessages/{{follower[0]}}" id="{{follower[0]}}" class="read">🎨 {{follower[0]}}</a></li>
                     %else:
-                    <li><a href="/directmessages/{{follower[0]}}">🎨 {{follower[0]}}</a></li><li id="{{follower[0]}}" class="unread"><button onclick="messageSwitch('{{follower[0]}}'); return false;" class="DMer-Button">🎨 {{follower[0]}}</button></li>
+                    <li><a href="/directmessages/{{follower[0]}}" id="{{follower[0]}}" class="unread">🎨 {{follower[0]}}</a></li>
                     %end
                 %end
             </ul>

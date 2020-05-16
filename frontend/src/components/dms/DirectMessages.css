@@ -67,14 +67,14 @@ li {
   font-family: "Comic Sans MS";
 }
 
-li.unread{
+a.unread{
   list-style-type: circle;
   color: red;
   font-size: 20px;
   font-family: "Comic Sans MS";
 }
 
-li.read{
+a.read{
   list-style-type: circle;
   color: darkcyan;
   font-size: 20px;
